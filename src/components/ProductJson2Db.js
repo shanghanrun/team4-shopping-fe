@@ -9,7 +9,7 @@ const ProductJson2Db = () => {
   const handleImport = async () => {
     try {
       const response = await api.get('/product/json-to-cloudDb');
-	  showToastMessage(response.data, "success"); 
+	  showToastMessage(response.data.message, "success"); 
       console.log(response.data); // 응답 메시지를 콘솔에 출력
     } catch (error) {
       console.error('Error Json to cloud DB:', error);

@@ -10,7 +10,7 @@ const ProductDb2Json = () => {
   const downloadJson = async () => {
     try {
       const response = await api.get('/product/cloudDb-to-json');
-      showToastMessage(response.data, "success"); // 응답 메시지를 상태로 저장
+      showToastMessage(response.data.message, "success"); // 응답 메시지를 상태로 저장
     } catch (error) {
       console.error('Error downloading Json file:', error);
       showToastMessage('Error exporting Json.', "error");
