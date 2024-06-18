@@ -11,6 +11,7 @@ import productStore from '../store/productStore'
 const InitialFormData = {
   name: "",
   sku: "",
+  kind:"women", // 기본값 설정  이게 있어야 나중에 SIZES[formData.kind] 값이 undefined가 안 될 수 있다.
   stock: {},
   image: "",
   description: "",
@@ -21,6 +22,17 @@ const InitialFormData = {
   freeDelivery:false,
   salePercent:0
 };
+
+const KIND=[
+  "women", "men", "kids", "accessories", "bags", "shoes"
+]
+const SIZES ={
+  "women": [ '200','300'],
+  "men":["300", '400'],
+  "accessories": [ '10', '20'],
+  "shoes": ['270', '280']
+}
+
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const {error, selectedProduct,createProduct,editProduct} = productStore()
   console.log('newItemDialog selectedProduct :', selectedProduct)
@@ -211,6 +223,27 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           />
         </Form.Group>
 
+        <Form.Group as={Col} controlId="kind">
+            <Form.Label>Kind</Form.Label>
+            <Form.Select
+              value={formData.kind}
+              onChange={handleChange}
+              required
+            >
+              {KIND.map((item, idx) => (
+                <option key={idx} value={item}>
+                  {item}
+                </option>
+              ))}
+            </Form.Select>
+        </Form.Group>
+
+{/* 
+        kind 가 null이 아닐 때 나타나게 한다.
+        knid에 따라서 SIZE 항목이 달라진다. 
+        
+        {kind && 식으로 하면 될 것 같다.}
+        */}
         <Form.Group className="mb-3" controlId="stock">
           <Form.Label className="mr-1">Stock</Form.Label>
           {stockError && (
@@ -233,7 +266,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                     <option value="" disabled selected hidden>
                       Please Choose...
                     </option>
-                    {SIZE.map((size, index) => (
+                    {SIZES[formData.kind].map((size, index) => (
                       <option
                         invalid="true"
                         value={size.toLowerCase()}
