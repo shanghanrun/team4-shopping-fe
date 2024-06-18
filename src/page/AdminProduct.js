@@ -12,13 +12,12 @@ import userStore from '../store/userStore'
 import LowStockProductTable from "../components/LowStockProductTable";
 
 const AdminProduct = () => {
-    const {productList, getProductList, totalPage, setSelectedProduct, deleteProduct, totalProductCount, selectedProduct, batchCreateProducts, productUpdated, openPopup,emptyNewProductList, getLowStockItems, lowStockItems } = productStore()
+    const {productList, getProductList, totalPage, setSelectedProduct, deleteProduct, totalProductCount, selectedProduct, productUpdated, openPopup,emptyNewProductList, getLowStockItems, lowStockItems } = productStore()
     const {getUserList} = userStore()
   const {getAllUserOrderList} = orderStore()
   const {showToastMessage} = uiStore()
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [showLowStockProduct, setShowLowStockProduct] =useState(false)
 
 
@@ -31,9 +30,11 @@ const AdminProduct = () => {
     "Sku",
     "Name",
     "Price",
+    "SalePrice",
     "Stock",
     "Image",
     "Status",
+    "FreeDelivery",
     "",
   ];
 
@@ -84,28 +85,6 @@ const AdminProduct = () => {
     //searchQuery가 바뀌면 useEffect실행된다.
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-  };
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      showToastMessage("파일을 선택해주세요.", 'error');
-      return;
-    }
-    if (!selectedFile.endsWith('.xslx')){
-      showToastMessage('올바른 형식의 파일을 사용하세요.','error')
-    }
-
-    const formData = new FormData();
-    console.log('selectedFile :', selectedFile)
-    formData.append('file', selectedFile);
-    for (let [key, value] of formData.entries()) {
-    console.log('store로 전송하는 formData: ', key, value);
-}
-    batchCreateProducts(formData, navigate)
-  };
-
   const toggleLowStockProductTable = () => {
     setShowLowStockProduct(!showLowStockProduct);
   };
@@ -125,8 +104,6 @@ const AdminProduct = () => {
           <Button variant="success" onClick={async()=> await openPopup()}>신상 보여주기</Button>
           <Button onClick={()=>emptyNewProductList()}>신상홍보제거</Button>
 
-           <input type="file" onChange={handleFileChange} accept=".xlsx" />
-          <Button variant="danger" onClick={handleUpload}>Add Items(batch)</Button>
         </div>
         <Button className="mt-2 mb-2" onClick={handleClickNewItem}>
           Add New Item +

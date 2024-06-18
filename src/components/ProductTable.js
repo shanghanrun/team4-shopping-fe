@@ -36,6 +36,7 @@ const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
                 <th>{item.sku}</th>
                 <th style={{ minWidth: "100px", maxWidth:"160px",wordWrap:'break-word' }}>{item.name}</th>
                 <th>{currencyFormat(item.price)}</th>
+                <th>{currencyFormat(item.salePrice)?? currencyFormat(item.price)}</th>
                 <th>
                   {Object.keys(item.stock).map((size, index) => (
                     <div key={index}>
@@ -47,6 +48,8 @@ const ProductTable = ({ header, data, deleteItem, openEditForm }) => {
                   <img src={item.image} width={100} alt="image" />
                 </th>
                 <th>{item.status}</th>
+                 <th>{item.freeDelivery.toString()?? "false"}</th>
+                <th></th>
                 <th style={{ minWidth: "100px" }}>
                   <Button
                     size="sm"

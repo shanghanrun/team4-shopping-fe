@@ -10,7 +10,6 @@ import productStore from '../store/productStore'
 
 const InitialFormData = {
   name: "",
-  chosung:[],
   sku: "",
   stock: {},
   image: "",
@@ -18,6 +17,9 @@ const InitialFormData = {
   category: [],
   status: "active",
   price: 0,
+  onePlus:false,
+  freeDelivery:false,
+  salePercent:0
 };
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const {error, selectedProduct,createProduct,editProduct} = productStore()
@@ -28,10 +30,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     mode === "new" ? { ...InitialFormData } : {}
   );
   const [stock, setStock] = useState([]);
-  const [chosung, setChosung] = useState([]);
-  const [chosungInput, setChosungInput] = useState('');
   const [stockError, setStockError] = useState(false);
-  const [chosungError, setChosungError] =useState(false);
 
   const handleClose = () => {
     //모든걸 초기화시키고;
@@ -45,35 +44,40 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     // console.log('formData :', formData)
     // [ ['s':3, 'xl':2] ] --> {s;3, xl;2}
     //재고를 입력했는지 확인, 아니면 에러
-    if(stock.length ===0) return setStockError(true) //return해야 다음진행안됨
-    if(chosung.length ===0) return setChosungError(true)
-    // 재고를 배열에서 객체로 바꿔주기
-    // stock.map((item)=> ( {[item[0]]: item[1]} ) )  // [{},{}] 어레이이다.
-    // let newStock ={}
-    // stock.forEach((item)=>{
-    //   newStock = {...newStock, [item[0]]: parseInt(item[1])}
-    // })
+    if(stock.length ===0) return setStockError(true)
 
-    // reduce(리듀스)를 사용하는 방법
     const totalStock = stock.reduce((total, item)=>{
       return {...total, [item[0]] : parseInt(item[1])}
     },{})
     console.log('totalStock :', totalStock)
 
-     const formDataWithChosung = { ...formData, stock: totalStock, chosung };
+     const finalFormData = { ...formData, stock: totalStock};
     if (mode === "new") {
-      await createProduct(formDataWithChosung, navigate);
+      await createProduct(finalFormData, navigate);
     } else {
-      await editProduct(formDataWithChosung, navigate);
+      await editProduct(finalFormData, navigate);
+      console.log('입력마친 final FormData :', finalFormData)
     }
-    setStockError(false); setChosungError(false)
+    setStockError(false); 
     setShowDialog(false);
   };
 
   const handleChange = (event) => {
     //form에 데이터 넣어주기
-    const {id, value} = event.target
-    setFormData({...formData, [id]:value })
+    const {id, value} = event.target    // e.target.value는 숫자가 문자로 변환된다.
+    let newValue = value    
+
+    if (id ==='salePercent'){
+      newValue = parseInt(value,10)  // 이상하게 문자로 받아진다
+      const salePrice = formData.price *(1- newValue /100)
+      console.log('salePercent :', newValue)
+      setFormData({...formData, [id]:newValue, salePrice: salePrice})
+    } else if (id === 'onePlus' || id ==='freeDelivery') {
+      newValue = value === 'true'
+      setFormData({...formData, [id]:newValue})
+    } else{
+      setFormData({...formData, [id]: value})
+    }
   };
 
   const addStock = () => {
@@ -102,15 +106,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     setStock(newStock)
   };
 
-  const handleInputChange = (e) => {
-    setChosungInput(e.target.value);
-  };
-  const addChosung = () => {
-    if (chosungInput.trim()) {
-      setChosung([...chosung, chosungInput]);
-      setChosungInput(''); // 입력 필드 초기화
-    }
-  };
 
   const onHandleCategory = (event) => {
     //이미 선택되었으면 제거
@@ -158,13 +153,11 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         // 선택된 데이터값 불러오기 (재고 형태 객체에서 어레이로 바꾸기)
         const result = convertSelectedProduct(selectedProduct)
         setFormData(result)
-        setChosung(selectedProduct.chosung || []); // chosung 설정
       } else {
         // 초기화된 값 불러오기
         // 이것은 의미 없을 것 같기도 한데...
         setFormData({...InitialFormData})
-        setStock([])
-        setChosung([]); // 초기화
+        setStock([]); // 초기화
       }
     }
   }, [showDialog]);
@@ -204,28 +197,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             />
           </Form.Group>
         </Row>
-
-        <Form.Group className="mb-3" controlId="chosung">
-          <Form.Label className="mr-1">Chosung</Form.Label>
-          {chosungError && (
-            <span className="error-message">초성을 추가해주세요</span>
-          )}
-          <Form.Control
-            type="text"
-            value={chosungInput}
-            onChange={handleInputChange}
-          />
-          <ListGroup horizontal>
-          {chosung.map((chosungEl, index) => (
-              <ListGroup.Item style={{width:'100px'}} key={index}>{chosungEl}</ListGroup.Item>
-          ))}
-        </ListGroup>
-          <Button size="sm" onClick={addChosung} className="mt-2">
-            Add +
-          </Button>
-        </Form.Group>
-        
-
 
         <Form.Group className="mb-3" controlId="description">
           <Form.Label>Description</Form.Label>
@@ -340,6 +311,50 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                 </option>
               ))}
             </Form.Control>
+          </Form.Group>
+          
+          <Form.Group as={Col} controlId="onePlus">
+            <Form.Label>OnePlus</Form.Label>
+            <Form.Select
+              value={formData.onePlus.toString()}
+              onChange={handleChange}
+              required
+            >
+              {["true", "false"].map((item, idx) => (
+                <option key={idx} value={item}>
+                  {item}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="freeDelivery">
+            <Form.Label>Free Deliver</Form.Label>
+            <Form.Select
+              value={formData.freeDelivery.toString()}
+              onChange={handleChange}
+              required
+            >
+              {["true", "false"].map((item, idx) => (
+                <option key={idx} value={item}>
+                  {item}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col} controlId="salePercent">
+            <Form.Label>Sale Percent</Form.Label>
+            <Form.Select
+              value={formData.salePercent}
+              onChange={handleChange}
+              required
+            >
+              {[0,15,30,50].map((item, idx) => (
+                <option key={idx} value={item}>
+                  {item}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
           <Form.Group as={Col} controlId="status">

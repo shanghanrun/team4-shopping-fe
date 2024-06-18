@@ -158,29 +158,7 @@ const productStore =create((set,get)=>({
 			uiStore.getState().showToastMessage(e.error, 'error');
 		}
 	},
-	batchCreateProducts:async(formData,navigate)=>{
-		try{
-			const resp = await api.post('/product/batch', formData)
-			console.log('성공한 데이터:', resp.data.data)
-			uiStore.getState().showToastMessage('상품 일괄가입을 완료했습니다.', 'success');
-
-			set((state)=>({
-				productList: [...state.productList, ...resp.data.data],
-				newProductList:[...state.newProductList, ...resp.data.data],
-				productUpdated: !state.productUpdated
-			}))
-			navigate('/admin/product')
-			//이렇게 productList를 업데이트하면서 업데이트 될 것 같지만 그렇지 않다.
-			// 동일한 페이지로 라우팅되고, url주소만 표시된다.
-			// 실제적으로 업데이트가 되게 하려면, productUpdated 값을 구독하게 만들어서, useEffect를 
-			// 실시해서 getProductList()하게 만들어야 된다.
-
-		}catch(e){
-			console.log('e.error:', e.error)
-			set({error: e.error})
-			uiStore.getState().showToastMessage(e.error, 'error');
-		}
-	},
+	
 	setSelectedProduct:(product)=>{
 		set((state)=>({
 			selectedProduct: product,
@@ -189,7 +167,7 @@ const productStore =create((set,get)=>({
 	},
 
 	editProduct:async(formData,navigate)=>{
-		console.log('store로 받은 formData :', formData)
+		console.log('store로 받은 formData####### :', formData)
 		try{
 			const resp = await api.put('/product/'+formData._id, formData)
 			console.log('성공한 데이터:', resp.data.data)
