@@ -3,15 +3,18 @@ import {Badge} from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 import { currencyFormat } from "../utils/number";
 import productStore from '../store/productStore'
+import userStore from '../store/userStore'
 
 const ProductCard = ({item}) => {
   const {selectProduct} = productStore()
+  const {updateUserViewed} = userStore()
   const [soldout, setSoldout] = useState(false)
   // console.log('items 배열안 각 객체의 _id', item?._id)
 	const navigate = useNavigate()
 
   const showProductDetail = (id) => {
     selectProduct(id)
+    updateUserViewed(id)
     navigate(`product/${id}`)
   };
   useEffect(()=>{

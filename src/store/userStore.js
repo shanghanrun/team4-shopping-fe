@@ -160,6 +160,14 @@ const userStore =create((set,get)=>({
 			uiStore.getState().showToastMessage('회원가입실패','error')
 		}
 	},
+	updateUserViewed:async(productId)=>{
+		try{
+			const resp = await api.put('/viewed', {productId})
+			set({user: resp.data.data})
+		}catch(e){
+			console.log(e.error)
+		}
+	}
 
 
 }))

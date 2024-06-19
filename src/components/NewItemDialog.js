@@ -13,6 +13,7 @@ const InitialFormData = {
   sku: "",
   kind:"women", // 기본값 설정  이게 있어야 나중에 SIZES[formData.kind] 값이 undefined가 안 될 수 있다.
   stock: {},
+  brand:"LG",  // 디폴트 밸류를 넣어두어야 선택안했을 경우 이거라도 들어간다.
   image: "",
   description: "",
   category: [],
@@ -24,14 +25,19 @@ const InitialFormData = {
 };
 
 const KIND=[
-  "women", "men", "kids", "accessories", "bags", "shoes"
+  "women", "men", "kids", "accessories", "bags", "shoes", "jewelry"
 ]
 const SIZES ={
-  "women": [ '200','300'],
-  "men":["300", '400'],
+  "women": [ 'xs','s', 'm', 'l', 'xl'],
+  "men":['s', 'm', 'l', 'xl'],
   "accessories": [ '10', '20'],
-  "shoes": ['270', '280']
+  "bags":['s', 'm','l'],
+  "shoes": ['270', '280'],
+  "jewelry":['gold', 'silver', 'metal']
 }
+const BRAND=[
+  'LG', 'SAMSUNG','CJ'
+]
 
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const {error, selectedProduct,createProduct,editProduct} = productStore()
@@ -261,7 +267,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                       handleSizeChange(event.target.value, index)
                     }
                     required
-                    defaultValue={item[0] ? item[0].toLowerCase() : ""}
+                    value={item[0] ? item[0].toLowerCase() : ""}
                   >
                     <option value="" disabled selected hidden>
                       Please Choose...
@@ -303,6 +309,21 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
               </Row>
             ))}
           </div>
+        </Form.Group>
+
+        <Form.Group as={Col} controlId="brand">
+            <Form.Label>Brand</Form.Label>
+            <Form.Select
+              value={formData.brand}
+              onChange={handleChange}
+              required
+            >
+              {BRAND.map((item, idx) => (
+                <option key={idx} value={item}>
+                  {item}
+                </option>
+              ))}
+            </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="Image" required>
