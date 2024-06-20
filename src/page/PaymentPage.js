@@ -34,6 +34,7 @@ const PaymentPage = () => {
     lastName: "",
     contact: "",
     address: "",
+    address2:"",
     // city: "", address와 중복되어서 제거한다.
     zip: "",
   });
@@ -75,7 +76,7 @@ const PaymentPage = () => {
       setShip(shipInfo)
       setPayment(cardValue)
 
-      const {firstName,lastName,contact,address,city,zip} = shipInfo
+      const {firstName,lastName,contact,address,address2, city,zip} = shipInfo
       const {cvc, expiry,name,number} =cardValue
 
       // 기존의 order 생성방식을 주석처리하고, 몽고디비에서도 제거한다.
@@ -99,7 +100,7 @@ const PaymentPage = () => {
       const data ={
         totalPrice, 
         salePrice,
-        shipTo:{address,city,zip},
+        shipTo:{address,address2,city,zip},
         contact:{firstName,lastName,contact},
         items: cart.items.map((item)=>{
           return {
@@ -172,7 +173,7 @@ const PaymentPage = () => {
                   </Form.Group>
                 </Row>
 
-                <Form.Group className="mb-3" controlId="formGridAddress1">
+                <Form.Group className="mb-3" controlId="formGridContact">
                   <Form.Label>연락처</Form.Label>
                   <Form.Control
                     placeholder="010-xxx-xxxxx"
@@ -193,7 +194,7 @@ const PaymentPage = () => {
                       value={shipInfo.zip}
                     />
                   </Form.Group>
-                <Form.Group className="mb-3" controlId="formGridAddress2">
+                <Form.Group className="mb-3" controlId="formGridAddress">
                   <Form.Label>주소</Form.Label>
                   <Form.Control
                     placeholder="'주소 검색'으로 자동 완성됩니다."
