@@ -5,7 +5,7 @@ import productStore from '../store/productStore';
 import orderStore from '../store/orderStore'
 import userStore from '../store/userStore'
 // import uiStore from '../store/uiStore'
-import Popup from "../components/Popup";
+
 
 const Computer =()=>{
 const {computerList, getProductList}= productStore()

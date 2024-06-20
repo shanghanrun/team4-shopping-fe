@@ -110,10 +110,10 @@ const productStore =create((set,get)=>({
 			})
 
 			const clothes = resp.data.data.filter((item)=>item.category.some( cat =>CLOTHES_CATEGORY.includes(cat)))
-			console.log('클로즈리스트:', clothes)
+			// console.log('클로즈리스트:', clothes)
 
 			const computers =resp.data.data.filter((item)=>item.category.some(cat =>COMPUTER_CATEGORY.includes(cat)))
-			console.log('컴퓨터/가전 리스트:', computers)
+			// console.log('컴퓨터/가전 리스트:', computers)
 
 			set({
 				productList: [...list],    	initialProductList:[...list],
@@ -234,6 +234,16 @@ const productStore =create((set,get)=>({
 			const resp = await api.get('/product/low-stock-products')
 			set({lowStockItems: resp.data.data})
 		} catch(e){
+			console.log('e.error:', e.error)
+			set({error: e.error})
+			uiStore.getState().showToastMessage(e.error, 'error');
+		}
+	},
+	getViewedList:async(viewedIds)=>{
+		try{
+			const resp = await api.post('/product/viewed',{viewedIds})
+			set({viewedProductList: resp.data.data})
+		}catch(e){
 			console.log('e.error:', e.error)
 			set({error: e.error})
 			uiStore.getState().showToastMessage(e.error, 'error');

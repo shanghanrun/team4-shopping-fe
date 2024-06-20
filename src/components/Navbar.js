@@ -67,7 +67,6 @@ const Navbar = ({ user }) => {
     if(menu ==='Computer'){
       return 'Computer/가전/자동차'
     } else if(menu ==='Bestseller'){
-      console.log('menu Bestseller 인 경우')
       return 'Best Seller';
     } else{
       return menu;
@@ -178,7 +177,7 @@ const Navbar = ({ user }) => {
               className="nav-icon"
             >
               <FontAwesomeIcon icon={faBox} />
-              {!isMobile && <span style={{ cursor: "pointer" }}>내 주문</span>}
+              {!isMobile && <span style={{ cursor: "pointer" }}>마이 페이지</span>}
             </div>
             {isMobile && (
               <div className="nav-icon" onClick={() => setShowSearchBox(true)}>

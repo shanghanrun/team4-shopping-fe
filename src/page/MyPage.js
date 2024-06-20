@@ -1,24 +1,38 @@
 import React from "react";
-import { useEffect} from "react";
+import { useEffect, useState} from "react";
 import {Link} from 'react-router-dom'
-import { Container } from "react-bootstrap";
+import { Container,Button } from "react-bootstrap";
 import OrderStatusCard from "../components/OrderStatusCard";
 import OrderStatusCardOuter from "../components/OrderStatusCardOuter";
 import "../style/orderStatus.style.css";
 import orderStore from '../store/orderStore'
 import userStore from '../store/userStore'
+import productStore from '../store/productStore'
 import movieStore from '../store/movieStore'
+import Popup2 from "../components/Popup2";
 
 const MyPage = () => {
   const {user} = userStore()
   const {orderList, getOrderList} = orderStore()
+  const {getViewedList, viewedProductList} = productStore()
   const {userMovies} = movieStore()
-  
+  const [openViewed, setOpenViewed]= useState(false)
+
   // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
   useEffect(()=>{
     // getOrderList()
     getOrderList()
+    getViewedList(user.viewedIds)
+    console.log('getViewedList 실행함')
   },[])
+
+  const showViewed=()=>{
+    setOpenViewed(!openViewed)
+  }
+  const closeViewed=()=>{
+    setOpenViewed(false)
+  }
+
   if(orderList.length ===0){
     return(
       <Container className="confirmation-page">
@@ -31,8 +45,17 @@ const MyPage = () => {
   }
   return (
     <Container className="status-card-container">
-      <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}
-      >{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
+      <div style={{display:'flex', gap:'20px', flexWrap:'wrap'}}>
+          <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
+          <Button variant='success' style={{height:'68px'}} onClick={showViewed}>{openViewed?'방문페이지 닫기' :'방문페이지(뭎품) 보기'}</Button>
+      </div>
+      <div className='popup-mother'>
+        <Popup2
+        openViewed={openViewed}
+        closeViewed={closeViewed}
+        viewedProductList={viewedProductList}
+        />
+      </div>
       {
         orderList.map((order, i)=>(
           <div key={i}>

@@ -53,8 +53,8 @@ const orderStore =create((set, get)=>({
 		console.log('getOrderList 서치쿼리', searchQuery)
 		try{
 			const resp = await api.get('/order',{params:searchQuery})
-			console.log('order목록:', resp.data.orderList)
-			console.log('page 정보:', resp.data.totalPageNum)
+			// console.log('order목록:', resp.data.orderList)
+			// console.log('page 정보:', resp.data.totalPageNum)
 			set({
 				orderList: resp.data.orderList,
 				totalPageNum: resp.data.totalPageNum
@@ -67,9 +67,9 @@ const orderStore =create((set, get)=>({
 	getAllUserOrderList:async(searchQuery)=>{  // admin에서 필요한 것
 		try{
 			const resp = await api.get('/order/all',{params:searchQuery})
-			console.log('order목록:', resp.data.data)
-			console.log('page 정보:', resp.data.totalPageNum)
-			console.log('getAlluserOrerList 객체:', resp)
+			// console.log('order목록:', resp.data.data)
+			// console.log('page 정보:', resp.data.totalPageNum)
+			// console.log('getAlluserOrerList 객체:', resp)
 			set({
 				allUserOrderList: resp.data.data,
 				totalPageNum: resp.data.totalPageNum,

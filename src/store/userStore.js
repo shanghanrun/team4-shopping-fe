@@ -162,7 +162,7 @@ const userStore =create((set,get)=>({
 	},
 	updateUserViewed:async(productId)=>{
 		try{
-			const resp = await api.put('/viewed', {productId})
+			const resp = await api.put('/user/viewed', {productId})
 			set({user: resp.data.data})
 		}catch(e){
 			console.log(e.error)

@@ -9,6 +9,7 @@ import userStore from '../store/userStore'
 import cartStore from '../store/cartStore'
 import { currencyFormat } from "../utils/number";
 import "../style/productDetail.style.css";
+import Review from "../components/Review";
 
 const ProductDetail = () => {
   const {selectedProduct} = productStore()
@@ -55,8 +56,10 @@ const ProductDetail = () => {
     <Container className="product-detail-card">
       <Row>
         <Col sm={6}>
-          <img
-            src={selectedProduct?.image} className="w-100" alt="" />
+          <div style={{padding:'10px'}}>
+            <img
+              src={selectedProduct?.image} className='w-100' alt="" />
+          </div>
         </Col>
         <Col className="product-info-area" sm={6}>
           <div className="product-info">{selectedProduct?.name}</div>
@@ -101,6 +104,9 @@ const ProductDetail = () => {
           <Button variant="dark" className="add-button" onClick={addItemToCart}>
             추가
           </Button>
+          <div style={{marginTop: '30px', padding:'10px'}}>
+            <Review />
+          </div>
         </Col>
       </Row>
     </Container>

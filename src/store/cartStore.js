@@ -22,8 +22,8 @@ const cartStore =create((set,get)=>({
 				cartUpdated: !state.cartUpdated
 			}))
 		}catch(e){
-			console.log('에러객체:', e)
-			console.log('e.error:', e.error)
+			// console.log('에러객체:', e)
+			// console.log('e.error:', e.error)
 			set({error: e.error})
 			uiStore.getState().showToastMessage(e.error, 'error'); 
 		}
@@ -40,8 +40,6 @@ const cartStore =create((set,get)=>({
 				cartCount: resp.data.cartItemQty
 			})
 		}catch(e){
-			console.log('에러객체:', e)
-			console.log('e.error:', e.error)
 			set({
 				error: e.error,
 				cartCount:0
