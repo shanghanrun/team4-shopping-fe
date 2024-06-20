@@ -10,6 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import userStore from '../store/userStore'
+import {Button} from 'react-bootstrap'
 import productStore from '../store/productStore'
 import cartStore from '../store/cartStore'
 import movieStore from '../store/movieStore'
@@ -41,6 +42,7 @@ const Navbar = ({ user }) => {
     "Clothes",
     "Computer",
     "Movies",
+    "Bestseller",
     "Info",
   ];
   
@@ -61,13 +63,16 @@ const Navbar = ({ user }) => {
     logout()
   };
 
-  // useEffect(()=>{ 아래로 병합
-  //   //user값이 처음에 null이다가 늦게 들어온다.
-  //   getUserMovies(user?._id)
-  //   // 그래서 user.id하면 에러가 발생한다.
-  //   // 그리고 초기에 user값이 없이 이것이 실행되니 값을 못받는다.
-  //   console.log('navbar에서 영화정보 받아옴...')
-  // },[user])
+  const getMenuDisplayName=(menu)=>{
+    if(menu ==='Computer'){
+      return 'Computer/가전/자동차'
+    } else if(menu ==='Bestseller'){
+      console.log('menu Bestseller 인 경우')
+      return 'Best Seller';
+    } else{
+      return menu;
+    }
+  }
 
   useEffect(()=>{
     getProductList(searchQuery)
@@ -116,11 +121,14 @@ const Navbar = ({ user }) => {
         </button>
 
         <div className="side-menu-list" id="menu-list">
-          {menuList.map((menu, index) => (
-            <li key={index}className="side-menu-item">
-              <Link to={`/${menu.toLowerCase()}`}>{(menu==='Computer')? 'Computer/가전/자동차' : menu}</Link>
-            </li>
-          ))}
+          <ul>
+            {menuList.map((menu, index) => (
+              <li key={index} className="side-menu-item">
+                <Link to={`/${menu.toLowerCase()}`}>{getMenuDisplayName(menu)}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       {user && user.level === "admin" && (
@@ -190,7 +198,7 @@ const Navbar = ({ user }) => {
         <ul className="menu">
           {menuList.map((menu, index) => (
             <li key={index}className="menu-item">
-              <Link to={`/${menu.toLowerCase()}`}>{(menu==='Computer')? 'Computer/가전/자동차' : menu}</Link>
+              <Link to={`/${menu.toLowerCase()}`}>{getMenuDisplayName(menu)}</Link>
             </li>
           ))}
         </ul>

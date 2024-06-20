@@ -18,6 +18,7 @@ import Movies from "../page/Movies";
 import Info from "../page/Info";
 import ClothesDetail from "../page/ClothesDetail";
 import ComputerDetail from "../page/ComputerDetail";
+import BestSeller from "../page/BestSeller";
 
 const AppRouter = () => {
   return (
@@ -33,6 +34,7 @@ const AppRouter = () => {
       <Route path="/computer" element={<Computer />} />
       <Route path="/computer/:id" element={<ComputerDetail />} />
       <Route path="/movies" element={<Movies />} />
+      <Route path="/bestseller" element={<BestSeller />} />
       <Route path="/info" element={<Info />} />
 
       <Route element={<PrivateRoute permissionLevel="customer" />}>

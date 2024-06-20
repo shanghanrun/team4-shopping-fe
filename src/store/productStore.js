@@ -1,6 +1,7 @@
 import {create} from 'zustand'
 import api from '../utils/api';
 import uiStore from './uiStore'
+import { bestItemNo, newItemDays } from '../constants/adminConstants';
 // import { isEqual } from 'lodash';
 
 const CLOTHES_CATEGORY = [
@@ -24,6 +25,7 @@ const productStore =create((set,get)=>({
 	totalPage:1,
 	totalProductCount:1,
 	newProductList:[], // 신상 공개용 리스트 
+	bestSellerList:[],
 	showPopup: false, 
 	openPopup:async()=>{
 		// 한 페이지의 5개상품이 아니라 모든 상품리스트를 구해야 된다.
@@ -45,7 +47,7 @@ const productStore =create((set,get)=>({
 	})}, 
 	makeNewProductList:async()=>{
 		try{ // query params없이 보내면 모든 데이터 받는다.
-			const days = 7;
+			const days = newItemDays;
 			const resp = await api.get('/product') 
 			const list = resp.data.data;
 			console.log('신상 추출을 위한 모든 목록:', list)
@@ -96,15 +98,17 @@ const productStore =create((set,get)=>({
 		}
 		try{
 			const resp= await api.get('/product', {params: {...searchQuery}})
-			console.log('product목록:',resp.data.data)
-			console.log('page 정보 : ',resp.data.totalPageNum)
+			const list = [...resp.data.data]
+
+			const listSortedBySoldCount =list.slice().sort((a,b)=> b.soldCount - a.soldCount)
+			// list.slice()는 복사하는 것  b-a 내림차순
 
 			set({
 				totalPage: resp.data.totalPageNum,
 				totalProductCount: resp.data.totalProductCount,
+				bestSellerList: listSortedBySoldCount.splice(0,bestItemNo)
 			})
-			const list = resp.data.data
-			// console.log('list :', list)
+
 			const clothes = resp.data.data.filter((item)=>item.category.some( cat =>CLOTHES_CATEGORY.includes(cat)))
 			console.log('클로즈리스트:', clothes)
 
