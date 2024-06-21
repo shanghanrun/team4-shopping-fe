@@ -60,7 +60,7 @@ const Review = ({user,product}) => {
         
 
         <div style={{display:'flex', gap:'40px'}}>
-          <h5>Total Reviews: {totalReviewCount} 개</h5>
+          <h5>Total Reviews: {itemReviewList?.length} 개</h5>
         </div>
         <div style={{height:'20px'}}></div>
 
