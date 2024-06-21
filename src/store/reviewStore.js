@@ -10,8 +10,13 @@ const reviewStore = create((set, get)=>({
 	reviewUpdated: false,
 	createReview:async(data)=>{ // data에 userId, productId,및 정보 들어옴
 		try{
-			const resp = await api.post('/review', {data})
-			// 리뷰페이지 상황에 따라 백엔드에서 만든 리뷰를 반환, 여기의 selectedReview에 넣을 수 있다.
+			console.log('스토어로 들어온 formData :', data)
+			const resp = await api.post('/review', data) // {data}가 아닌 data
+			console.log('스토어로 받은 review', resp.data.data)
+			set({
+				selectedReview: resp.data.data,
+				reviewUpdated: !get().reviewUpdated
+			})
 		}catch(e){
 			console.log(e.error)
 		}
@@ -19,9 +24,9 @@ const reviewStore = create((set, get)=>({
 	getItemReviewList:async(productId)=>{
 		try{
 			const resp = await api.get('/review/'+productId)
+			console.log('스토어 getItemReviewList 시작. productId :', productId)
 			set({ 
 				itemReviewList: resp.data.data,
-				reviewUpdated: !get().reviewUpdated 
 			})
 		}catch(e){
 			console.log(e.error)

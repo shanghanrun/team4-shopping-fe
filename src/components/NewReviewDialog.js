@@ -15,9 +15,9 @@ const STAR=[
 
 const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShowDialog }) => {
   const InitialFormData = {
-    author: user.name,
-    authorId: user._id,
-    productId: product._id,
+    author: user?.name,
+    authorId: user?._id,
+    productId: product?._id,
     title:"",
     image: "",
     content: "",
@@ -35,7 +35,6 @@ const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShow
 
 
   const {error, createReview,editReview} = reviewStore()
-  const navigate = useNavigate()
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : {}
   );
@@ -49,9 +48,10 @@ const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShow
     event.preventDefault();
 
     if (mode === "new") {
-      await createReview(formData, navigate);
+      await createReview(formData);
+      console.log('입력마치고 보내는 formData:', formData)
     } else {
-      await editReview(formData, navigate);
+      await editReview(formData);
       console.log('입력마친 formData :', formData)
     }
     setShowDialog(false);

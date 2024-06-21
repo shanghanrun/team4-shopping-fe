@@ -9,18 +9,18 @@ import userStore from '../store/userStore';
 import reviewStore from '../store/reviewStore';
 import replyStore from '../store/replyStore';
 import NewReviewDialog from "./NewReviewDialog";
-import ProductTable from './ProductTable';
+import ReviewTable from "./ReviewTable";
 
 const Review = ({user,product}) => {
   const {showToastMessage} = uiStore()
-  const {getItemReviewList, itemReviewList,reviewUpdated, deleteReview,setSelectedReview,selectedReview, totalReviewCount} = reviewStore()
+  const {itemReviewList, deleteReview,setSelectedReview,selectedReview, totalReviewCount} = reviewStore()
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
   const [mode, setMode]  = useState('new')
 
-  useEffect(()=>{
-    getItemReviewList(product._id)
-  },[reviewUpdated])
+  // useEffect(()=>{
+  //   getItemReviewList(product._id)
+  // },[reviewUpdated])
 
   const openEditForm =(review)=>{
     setMode('edit')
@@ -64,7 +64,7 @@ const Review = ({user,product}) => {
         </div>
         <div style={{height:'20px'}}></div>
 
-        <ProductTable
+        <ReviewTable
           header={tableHeader}
           data={itemReviewList}
           deleteReview={deleteThisReview}

@@ -10,9 +10,11 @@ import cartStore from '../store/cartStore'
 import { currencyFormat } from "../utils/number";
 import "../style/productDetail.style.css";
 import Review from "../components/Review";
+import reviewStore from '../store/reviewStore'
 
 const ProductDetail = () => {
   const {selectedProduct} = productStore()
+  const {getItemReviewList, reviewUpdated}= reviewStore()
   const {user} = userStore()
   const {addToCart} = cartStore()
   console.log('디테일 페이지 selectedProduct:', selectedProduct)
@@ -50,8 +52,8 @@ const ProductDetail = () => {
     const isSoldOut = Object.keys(selectedProduct.stock).every((key) => selectedProduct.stock[key] === 0);
     setSoldout(isSoldOut);
 
-
-  },[selectedProduct])
+    getItemReviewList(selectedProduct._id)
+  },[selectedProduct, reviewUpdated])
   return (
     <Container className="product-detail-card">
       <Row>
