@@ -63,7 +63,7 @@ const reviewStore = create((set, get)=>({
 	deleteReview:async(reviewId)=>{
 		try{
 			const resp = await api.delete('/review/'+reviewId)
-			console.log('잘 삭제되었습니다.')
+			console.log('리뷰가 잘 삭제되었습니다.')
 			set({
 				reviewUpdated: !get().reviewUpdated 
 			})
@@ -72,3 +72,5 @@ const reviewStore = create((set, get)=>({
 		}
 	}
 }))
+
+export default reviewStore;
