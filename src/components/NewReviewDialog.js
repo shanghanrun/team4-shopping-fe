@@ -7,139 +7,65 @@ import "../style/adminProduct.style.css";
 
 import uiStore from '../store/uiStore';
 import productStore from '../store/productStore'
-
-const InitialFormData = {
-  name: "",
-  sku: "",
-  kind:"women", // 기본값 설정  이게 있어야 나중에 SIZES[formData.kind] 값이 undefined가 안 될 수 있다.
-  stock: {},
-  brand:"LG",  // 디폴트 밸류를 넣어두어야 선택안했을 경우 이거라도 들어간다.
-  image: "",
-  description: "",
-  category: [],
-  status: "active",
-  price: 0,
-  onePlus:false,
-  freeDelivery:false,
-  salePercent:0
-};
+import reviewStore from '../store/reviewStore'
 
 const KIND=[
   "women", "men", "kids", "accessories", "bags", "shoes", "jewelry"
 ]
-const SIZES ={
-  "women": [ 'xs','s', 'm', 'l', 'xl'],
-  "men":['s', 'm', 'l', 'xl'],
-  "accessories": [ '10', '20'],
-  "bags":['s', 'm','l'],
-  "shoes": ['270', '280'],
-  "jewelry":['gold', 'silver', 'metal']
-}
-const BRAND=[
-  'LG', 'SAMSUNG','CJ'
-]
 
-const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
-  const {error, selectedProduct,createProduct,editProduct} = productStore()
-  // console.log('newItemDialog selectedProduct :', selectedProduct)
+const NewReviewDialog = ({ user,product, mode, showDialog, setShowDialog }) => {
+  const InitialFormData = {
+    author: user.name,
+    authorId: user._id,
+    productId: product._id,
+    title:"",
+    image: "",
+    content: "",
+    star: 1
+  };
+  const DefaultFormData = {
+    author: selectedReview.author,
+    authorId: selectedReview.authorId,
+    productId: selectedReview.productId,
+    title:selectedReview.title,
+    image:selectedReview.image,
+    content:selectedReview.content,
+    star: selectedReview.star
+  };
+
+
+  const {error, selectedReview,createReview,editReview} = reviewStore()
   const navigate = useNavigate()
-  // const [selectedFormData, setSelectedFormData]=useState({})
   const [formData, setFormData] = useState(
     mode === "new" ? { ...InitialFormData } : {}
   );
-  const [stock, setStock] = useState([]);
-  const [stockError, setStockError] = useState(false);
 
   const handleClose = () => {
-    //모든걸 초기화시키고;
-    // 다이얼로그 닫아주기
-    setFormData({...InitialFormData}) //그런데 안먹힌다.
+    setFormData({...InitialFormData}) 
     setShowDialog(false)
   };
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    // console.log('formData :', formData)
-    // [ ['s':3, 'xl':2] ] --> {s;3, xl;2}
-    //재고를 입력했는지 확인, 아니면 에러
-    if(stock.length ===0) return setStockError(true)
 
-    const totalStock = stock.reduce((total, item)=>{
-      return {...total, [item[0]] : parseInt(item[1])}
-    },{})
-    console.log('totalStock :', totalStock)
-
-     const finalFormData = { ...formData, stock: totalStock};
     if (mode === "new") {
-      await createProduct(finalFormData, navigate);
+      await createReview(formData, navigate);
     } else {
-      await editProduct(finalFormData, navigate);
-      console.log('입력마친 final FormData :', finalFormData)
+      await editReview(formData, navigate);
+      console.log('입력마친 formData :', formData)
     }
-    setStockError(false); 
     setShowDialog(false);
   };
 
   const handleChange = (event) => {
-    //form에 데이터 넣어주기
     const {id, value} = event.target    // e.target.value는 숫자가 문자로 변환된다.
     let newValue = value    
 
-    if (id ==='salePercent'){
+    if (id ==='star'){
       newValue = parseInt(value,10)  // 이상하게 문자로 받아진다
-      const salePrice = formData.price *(1- newValue /100)
-      console.log('salePercent :', newValue)
-      setFormData({...formData, [id]:newValue, salePrice: salePrice})
-    } else if (id === 'onePlus' || id ==='freeDelivery') {
-      newValue = value === 'true'
       setFormData({...formData, [id]:newValue})
     } else{
       setFormData({...formData, [id]: value})
-    }
-  };
-
-  const addStock = () => {
-    //재고타입 추가시 배열에 새 배열 추가
-    setStock([...stock, []])
-  };
-  const deleteStock = (idx) => {
-    //재고 삭제하기
-    //배열에서의 요소 삭제는 filter로 하는 것이 가장 일반적이다.
-    const newStock = stock.filter((item,i)=> i !== idx)
-    setStock(newStock)
-  };
-
-  const handleSizeChange = (value, index) => {
-    //  재고 사이즈 변환하기
-    // [["s",3], ['m',4],['xl',5]
-    const newStock = [...stock]
-    newStock[index][0] = value;
-    setStock(newStock);
-  };
-  
-  const handleStockChange = (value, index) => {
-    //재고 수량 변환하기
-    const newStock =[...stock]
-    newStock[index][1] = value
-    setStock(newStock)
-  };
-
-
-  const onHandleCategory = (event) => {
-    //이미 선택되었으면 제거
-    if (formData.category.includes(event.target.value)) {
-      const newCategory = formData.category.filter(
-        (item) => item !== event.target.value
-      );
-      setFormData({
-        ...formData,
-        category: [...newCategory],
-      });
-    } else { //선택 안되었으면 추가
-      setFormData({
-        ...formData,
-        category: [...formData.category, event.target.value],
-      });
     }
   };
 
@@ -148,34 +74,15 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     setFormData({...formData, image: url})
   };
 
-  const convertSelectedProduct=(product)=>{
-    const stock =[]
-    const keys = Object.keys(product.stock)
-    console.log('keys :', keys)
-    keys.forEach((key)=>{
-      stock.push([key, product.stock[key]])
-    })
-    console.log('변환된 stock :', stock)
-    setStock(stock)
-    console.log('변환된 selected product:', {...product, stock})
-    return {...product, stock}
-  }
-  // const convert=(product)=>{
-  //   const stock = Object.keys(product.stock).map((key)=>[key,product.stock[key]])
-  //   setStock(stock)
-  //   return {...product, stock}
-  // }
+ 
   useEffect(() => {
     if (showDialog) {
       if (mode === "edit") {
-        // 선택된 데이터값 불러오기 (재고 형태 객체에서 어레이로 바꾸기)
-        const result = convertSelectedProduct(selectedProduct)
-        setFormData(result)
+        setFormData({...DefaultFormData})
       } else {
         // 초기화된 값 불러오기
         // 이것은 의미 없을 것 같기도 한데...
-        setFormData({...InitialFormData})
-        setStock([]); // 초기화
+        setFormData({...InitialFormData})// 초기화
       }
     }
   }, [showDialog]);
@@ -440,4 +347,4 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   );
 };
 
-export default NewItemDialog;
+export default NewReviewDialog;

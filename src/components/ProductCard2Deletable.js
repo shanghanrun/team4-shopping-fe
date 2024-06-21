@@ -5,9 +5,12 @@ import { currencyFormat } from "../utils/number";
 import productStore from '../store/productStore'
 import userStore from '../store/userStore'
 import { newItemDays } from "../constants/adminConstants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const ProductCard2 = ({item}) => {
-  const {selectProduct} = productStore()
+const ProductCard2Deletable = ({item}) => {
+  // console.log('item의 구조:', item)
+  const {selectProduct, deleteItemFromUserViewed} = productStore()
   const {updateUserViewed} = userStore()
   const [soldout, setSoldout] = useState(false)
   const [newItem, setNewItem] = useState(false)
@@ -30,14 +33,27 @@ const ProductCard2 = ({item}) => {
 
     const isNewItem = verifyNewItem(item)
     setNewItem(isNewItem)
-
-
   },[item])
 
+  const deleteCard = (e) => {
+    e.stopPropagation(); // 상위의 showProductDetail 작동하지 않도록
+    console.log('deleteCard 작동됨')
+    deleteItemFromUserViewed(item._id)
+  };
+
   return (
-    <div className="card2" onClick={()=>showProductDetail(item?._id)}>
-      <img
-        src={item?.image} alt="" width='200px' height='200px'/>
+    <div className="card2-deletable" onClick={()=>showProductDetail(item?._id)}>
+      <div className="display-flex space-between align-items-start">
+        <img
+          src={item?.image} alt="" width='200px' height='200px'/>
+        <button className="trash-button">
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  width={24}
+                  onClick={(e) => deleteCard(e)}
+                />
+        </button>
+      </div>
       <div>{item?.name}</div>
       <div>가격: W {currencyFormat(item?.price)}</div>
       <div style={{color:'red'}}>세일가격: W {currencyFormat(item?.salePrice?? '')}</div>
@@ -53,4 +69,4 @@ const ProductCard2 = ({item}) => {
   );
 };
 
-export default ProductCard2;
+export default ProductCard2Deletable;

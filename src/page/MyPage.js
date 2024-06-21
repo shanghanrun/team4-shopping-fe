@@ -9,12 +9,12 @@ import orderStore from '../store/orderStore'
 import userStore from '../store/userStore'
 import productStore from '../store/productStore'
 import movieStore from '../store/movieStore'
-import Popup2 from "../components/Popup2";
+import Popup2Deletable from "../components/Popup2Deletable";
 
 const MyPage = () => {
   const {user} = userStore()
   const {orderList, getOrderList} = orderStore()
-  const {getViewedList, viewedProductList} = productStore()
+  const {getViewedProductList, viewedProductList,viewedUpdated} = productStore()
   const {userMovies} = movieStore()
   const [openViewed, setOpenViewed]= useState(false)
 
@@ -22,8 +22,7 @@ const MyPage = () => {
   useEffect(()=>{
     // getOrderList()
     getOrderList()
-    getViewedList(user.viewedIds)
-    console.log('getViewedList 실행함')
+    getViewedProductList(user.viewedIds)
   },[])
 
   const showViewed=()=>{
@@ -47,10 +46,10 @@ const MyPage = () => {
     <Container className="status-card-container">
       <div style={{display:'flex', gap:'20px', flexWrap:'wrap'}}>
           <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
-          <Button variant='success' style={{height:'68px'}} onClick={showViewed}>{openViewed?'방문페이지 닫기' :'방문페이지(뭎품) 보기'}</Button>
+          <Button variant='success' style={{height:'68px'}} onClick={showViewed}>{openViewed?'방문페이지 닫기' :'방문페이지(물품) 보기'}</Button>
       </div>
       <div className='popup-mother'>
-        <Popup2
+        <Popup2Deletable
         openViewed={openViewed}
         closeViewed={closeViewed}
         viewedProductList={viewedProductList}

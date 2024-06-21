@@ -14,6 +14,7 @@ const COMPUTER_CATEGORY =[
 const productStore =create((set,get)=>({
 	error:'',
 	productUpdated:false,
+	viewedUpdated:false,
 	selectedProduct:null,
 	selectedClothes:null,
 	selectedComputer:null,
@@ -25,6 +26,7 @@ const productStore =create((set,get)=>({
 	totalPage:1,
 	totalProductCount:1,
 	newProductList:[], // 신상 공개용 리스트 
+	viewedProductList:[],
 	bestSellerList:[],
 	showPopup: false, 
 	openPopup:async()=>{
@@ -239,7 +241,7 @@ const productStore =create((set,get)=>({
 			uiStore.getState().showToastMessage(e.error, 'error');
 		}
 	},
-	getViewedList:async(viewedIds)=>{
+	getViewedProductList:async(viewedIds)=>{
 		try{
 			const resp = await api.post('/product/viewed',{viewedIds})
 			set({viewedProductList: resp.data.data})
@@ -248,7 +250,21 @@ const productStore =create((set,get)=>({
 			set({error: e.error})
 			uiStore.getState().showToastMessage(e.error, 'error');
 		}
-	}
+	},
+	deleteItemFromUserViewed:async(productId)=>{
+		try{
+			const resp = await api.delete('/user/viewed/'+productId)
+			console.log('받은 viewedProductList :', resp.data.data)
+			set({ 
+				viewedProductList: resp.data.data, 
+				viewedUpdated: !get().viewedUpdated
+			})
+		}catch(e){
+			console.log('e.error:', e.error)
+			set({error: e.error})
+			uiStore.getState().showToastMessage(e.error, 'error');
+		}
+	},
 }))
 
 export default productStore;

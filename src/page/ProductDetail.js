@@ -105,7 +105,7 @@ const ProductDetail = () => {
             추가
           </Button>
           <div style={{marginTop: '30px', padding:'10px'}}>
-            <Review />
+            <Review user={user} product={selectedProduct} />
           </div>
         </Col>
       </Row>

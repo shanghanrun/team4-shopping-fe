@@ -12,8 +12,8 @@ const cartStore =create((set,get)=>({
 	addToCart: async({id,size}) => {
 		try{
 			const resp = await api.post('/cart',{productId:id,size:size})
-			console.log('성공한 cart데이터:', resp.data.data)
-			console.log('성공한 cartItemQty:', resp.data.cartItemQty)
+			// console.log('성공한 cart데이터:', resp.data.data)
+			// console.log('성공한 cartItemQty:', resp.data.cartItemQty)
 			uiStore.getState().showToastMessage('카트에 추가했습니다.', 'success');
 
 			set((state)=>({
@@ -31,8 +31,8 @@ const cartStore =create((set,get)=>({
 	getCart:async()=>{
 		try{
 			const resp = await api.get('/cart')
-			console.log('성공한 cart데이터:', resp.data.data)
-			console.log('성공한 cartItemQty:', resp.data.cartItemQty)
+			// console.log('성공한 cart데이터:', resp.data.data)
+			// console.log('성공한 cartItemQty:', resp.data.cartItemQty)
 			// uiStore.getState().showToastMessage('카트리스트를 받아왔습니다.', 'success');
 
 			set({

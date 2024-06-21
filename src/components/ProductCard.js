@@ -54,8 +54,8 @@ const ProductCard = ({item}) => {
       <img
         src={item?.image} alt="" />
       <div>{item?.name}</div>
-      <div>W {currencyFormat(item?.price)}</div>
-      <div>W {currencyFormat(item?.salePrice?? '')}</div>
+      <div>가격: W {currencyFormat(item?.price)}</div>
+      <div style={{color:'red'}}>세일가격: W {currencyFormat(item?.salePrice?? '')}</div>
       {/* <div>{soldout? <Badge bg="danger">품절</Badge> : ''}</div> */}
       <div style={{display:'flex', gap:'5px',  flexWrap:'wrap'}}>
         {soldout && <Badge bg='danger' style={{width:'60px'}}>품절</Badge>}
