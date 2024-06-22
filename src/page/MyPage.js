@@ -6,7 +6,6 @@
 import React, { useState, useEffect } from "react";
 import {Link} from 'react-router-dom'
 import { Container,Button } from "react-bootstrap";
-import OrderStatusCard from "../components/OrderStatusCard";
 import OrderStatusCardOuter from "../components/OrderStatusCardOuter";
 import "../style/orderStatus.style.css";
 import orderStore from '../store/orderStore'
@@ -14,6 +13,7 @@ import userStore from '../store/userStore'
 import productStore from '../store/productStore'
 import movieStore from '../store/movieStore'
 import Popup2Deletable from "../components/Popup2Deletable";
+import { currencyFormat } from './../utils/number';
 
 const MyPage = () => {
   const {user} = userStore()
@@ -30,6 +30,12 @@ const MyPage = () => {
   },[])
 
   const showViewed=()=>{
+    setOpenViewed(!openViewed)
+  }
+  const showId=()=>{
+    setOpenViewed(!openViewed)
+  }
+  const showShipTo=()=>{
     setOpenViewed(!openViewed)
   }
   const closeViewed=()=>{
@@ -50,12 +56,17 @@ const MyPage = () => {
     <Container className="status-card-container">
 
       
-
-
-
-      <div style={{display:'flex', gap:'20px', flexWrap:'wrap'}}>
+      <div style={{display:'flex', gap:'10px', flexWrap:'wrap'}}>
           <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
-          <Button variant='success' style={{height:'68px'}} onClick={showViewed}>{openViewed?'방문페이지 닫기' :'방문페이지(물품) 보기'}</Button>
+
+          <div style={{border:'solid 1px gray', padding:'5px', height:'70px', boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'
+          }}>
+            <p>credit: {currencyFormat(user.credit)}원</p>
+            <p>coupon: {currencyFormat(user.coupon)}원</p>
+          </div>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'관심 닫기' :'관심 보기'}</Button>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showId}>{openIdViewed?'아이디수정 닫기' :'아이디 수정'}</Button>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showShipTo}>{openShipToViewed?'주배송지수정 닫기' :'주배송지 선택'}</Button>
       </div>
       <div className='popup-mother'>
         <Popup2Deletable
