@@ -57,13 +57,13 @@ const ProductDetail = () => {
   return (
     <Container className="product-detail-card">
       <Row>
-        <Col sm={6}>
+        <Col sm={5}>
           <div style={{padding:'10px'}}>
             <img
               src={selectedProduct?.image} className='w-100' alt="" />
           </div>
         </Col>
-        <Col className="product-info-area" sm={6}>
+        <Col className="product-info-area" sm={7}>
           <div className="product-info">{selectedProduct?.name}</div>
           <div className="product-info">₩ {currencyFormat(selectedProduct?.price)}</div>
           <div className="product-info">{selectedProduct?.description}</div>

@@ -7,7 +7,10 @@ const ReviewTable = ({ header, data, deleteItem, openEditForm }) => {
   // const {sortProductListBySkuDesc, sortProductListBySkuAsc } = productStore()
   // const [sortBySkuDesc, setSortBySkuDesc] = useState(true);
 
-  
+  const convertToStar2 = (star) => {
+    return ('⭐'.repeat(star));
+  };
+ 
   
   return (
     <div className="overflow-x">
@@ -31,7 +34,7 @@ const ReviewTable = ({ header, data, deleteItem, openEditForm }) => {
                 </th>
                 
                 <th>{item.content}</th>
-                <th>{item.star}</th>
+                <th>{convertToStar2(item.star)}</th>
                 
                 <th style={{ minWidth: "100px" }}>
                   <Button
@@ -53,7 +56,11 @@ const ReviewTable = ({ header, data, deleteItem, openEditForm }) => {
               <td colSpan={header.length} style={{ textAlign: "center" }}>No Data to show</td>
             </tr>
           )}
+          
         </tbody>
+        
+          
+        
       </Table>
     </div>
   );

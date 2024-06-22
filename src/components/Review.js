@@ -53,7 +53,10 @@ const Review = ({user,product}) => {
   return (
     <div className="locate-center">
       <Container>
-        
+        <div style={{border: 'solid 1px gray', padding:'10px'}}>
+          <h5>제품 후기</h5>
+          <div style={{color:"#1269dc"}}> 여러분의 소중한 후기를 남겨주시면, credit으로 1,000원을 지급해 드립니다.</div>
+        </div>
         <Button className="mt-2 mb-2" onClick={handleNewReviewClick}>
           Add New Review +
         </Button>
@@ -67,7 +70,7 @@ const Review = ({user,product}) => {
         <ReviewTable
           header={tableHeader}
           data={itemReviewList}
-          deleteReview={deleteThisReview}
+          deleteItem={deleteThisReview}
           openEditForm={openEditForm}
         />
       </Container>

@@ -1,5 +1,9 @@
-import React from "react";
-import { useEffect, useState} from "react";
+
+
+
+
+
+import React, { useState, useEffect } from "react";
 import {Link} from 'react-router-dom'
 import { Container,Button } from "react-bootstrap";
 import OrderStatusCard from "../components/OrderStatusCard";
@@ -44,6 +48,11 @@ const MyPage = () => {
   }
   return (
     <Container className="status-card-container">
+
+      
+
+
+
       <div style={{display:'flex', gap:'20px', flexWrap:'wrap'}}>
           <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
           <Button variant='success' style={{height:'68px'}} onClick={showViewed}>{openViewed?'방문페이지 닫기' :'방문페이지(물품) 보기'}</Button>
@@ -59,13 +68,6 @@ const MyPage = () => {
         orderList.map((order, i)=>(
           <div key={i}>
             <OrderStatusCardOuter order={order} />
-            {/* <div>
-              {
-                order.items.map((item,j)=>
-                  <OrderStatusCard key={j} order={order} item={item} />
-                )
-              }
-            </div> */}
           </div> 
         ))
       }

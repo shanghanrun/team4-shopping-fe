@@ -24,6 +24,7 @@ const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShow
     star: 1
   };
   const DefaultFormData = {
+    _id: selectedReview?._id,
     author: selectedReview?.author,
     authorId: selectedReview?.authorId,
     productId: selectedReview?.productId,
@@ -51,8 +52,9 @@ const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShow
       await createReview(formData);
       console.log('입력마치고 보내는 formData:', formData)
     } else {
-      await editReview(formData);
       console.log('입력마친 formData :', formData)
+      await editReview(formData);
+      
     }
     setShowDialog(false);
   };
@@ -73,7 +75,9 @@ const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShow
     //이미지 업로드
     setFormData({...formData, image: url})
   };
-
+  const convertToStar = (star) => {
+    return '⭐'.repeat(star);
+  };
  
   useEffect(() => {
     if (showDialog) {
@@ -119,7 +123,7 @@ const NewReviewDialog = ({ user,product,selectedReview,mode, showDialog, setShow
             >
               {STAR.map((item, idx) => (
                 <option key={idx} value={item}>
-                  {item}
+                  {convertToStar(item)}
                 </option>
               ))}
             </Form.Select>

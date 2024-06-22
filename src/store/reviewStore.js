@@ -1,5 +1,6 @@
 import {create} from 'zustand'
 import api from './../utils/api';
+import uiStore from './uiStore'
 
 
 const reviewStore = create((set, get)=>({
@@ -17,6 +18,37 @@ const reviewStore = create((set, get)=>({
 				selectedReview: resp.data.data,
 				reviewUpdated: !get().reviewUpdated
 			})
+		}catch(e){
+			console.log(e.error)
+		}
+	},
+	setSelectedReview:(review)=>{
+		set({
+			selectedReview: review,
+			reviewUpdated: !get().reviewUpdated
+		})
+	},
+	editReview:async(formData)=>{
+		console.log('store로 받은 formData :', formData)
+		try{
+			const resp = await api.put('/review', formData)
+			console.log('성공한 데이터:', resp.data.data)
+			set({
+				selectedReview: resp.data.data,
+				reviewUpdated: !get().reviewUpdated
+			})
+			uiStore.getState().showToastMessage('상품수정을 완료했습니다.', 'success');
+		}catch(e){
+			console.log(e.error)
+		}
+	},
+	deleteReview:async(id)=>{
+		try{
+			const resp = await api.delete('/review/'+id)
+			uiStore.getState().showToastMessage('상품이 삭제되었습니다.', 'success');		
+			set({
+				productUpdated: !get().productUpdated
+			})	
 		}catch(e){
 			console.log(e.error)
 		}
