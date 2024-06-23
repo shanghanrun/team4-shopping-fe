@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import PaymentForm from "../components/PaymentForm";
 import "../style/paymentPage.style.css";
-import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { cc_expires_format } from "../utils/number";
 import orderStore from '../store/orderStore'
@@ -15,10 +14,9 @@ const PaymentPage = () => {
   const {user, leftCredit, leftCoupon, creditPlus, lastTotal, setCoupon, setCredit, setUserCreditCoupon} = userStore()
   const salePrice = lastTotal;
   
-  const {setShip, setPayment,createOrder} = orderStore()
+  const {setShip, setPayment,createOrder, totalPrice} = orderStore()
   const {cart} = cartStore()
   const {showToastMessage} = uiStore()
-  const {totalPrice} = orderStore()
 
   const [cardValue, setCardValue] = useState({
     cvc: "",
@@ -28,14 +26,13 @@ const PaymentPage = () => {
     number: "",
   });
   const navigate = useNavigate();
-  const [firstLoading, setFirstLoading] = useState(true);
   const [shipInfo, setShipInfo] = useState({
     firstName: "",
     lastName: "",
     contact: "",
     address: "",
     address2:"",
-    // city: "", address와 중복되어서 제거한다.
+    city: "",
     zip: "",
   });
 
@@ -76,8 +73,8 @@ const PaymentPage = () => {
       setShip(shipInfo)
       setPayment(cardValue)
 
-      const {firstName,lastName,contact,address,address2, city,zip} = shipInfo
-      const {cvc, expiry,name,number} =cardValue
+      // const {firstName,lastName,contact,address,address2, city,zip} = shipInfo
+      // const {cvc, expiry,name,number} =cardValue
 
       // 기존의 order 생성방식을 주석처리하고, 몽고디비에서도 제거한다.
       // const data ={
@@ -100,8 +97,8 @@ const PaymentPage = () => {
       const data ={
         totalPrice, 
         salePrice,
-        shipTo:{address,address2,city,zip},
-        contact:{firstName,lastName,contact},
+        shipTo:{...shipInfo},
+        contact: shipInfo.contact,
         items: cart.items.map((item)=>{
           return {
             productId: item.productId._id,
@@ -143,122 +140,144 @@ const PaymentPage = () => {
     setCardValue({ ...cardValue, focus: e.target.name });
   };
   //카트에 아이템이 없다면 다시 카트페이지로 돌아가기 (결제할 아이템이 없으니 결제페이지로 가면 안됌)
+
+  const handleUseDefaultAddress =()=>{
+    const defaultAddress = user.shipTo[0]
+    setShipInfo({
+      ...shipInfo,
+      firstName: defaultAddress.firstName,
+      lastName: defaultAddress.lastName,
+      contact: defaultAddress.contact,
+      address: defaultAddress.address,
+      address2:defaultAddress.address2,
+      city:defaultAddress.city,
+      zip:defaultAddress.zip
+    })
+  }
   return (
     <Container>
       <Row>
         <Col lg={7}>
           <div>
             <h2 className="mb-2">배송 주소</h2>
-            <div>
-              <Form onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="lastName">
-                    <Form.Label>성</Form.Label>
-                    <Form.Control
-                      type="text"
-                      onChange={handleFormChange}
-                      required
-                      name="lastName"
-                    />
-                  </Form.Group>
+            <Form onSubmit={handleSubmit}>
+              <Form.Check
+                type="radio"
+                label="기본주소 선택"
+                name="defaultAddress"
+                onClick={handleUseDefaultAddress}
+              />
 
-                  <Form.Group as={Col} controlId="firstName">
-                    <Form.Label>이름</Form.Label>
-                    <Form.Control
-                      type="text"
-                      onChange={handleFormChange}
-                      required
-                      name="firstName"
-                    />
-                  </Form.Group>
-                </Row>
-
-                <Form.Group className="mb-3" controlId="formGridContact">
-                  <Form.Label>연락처</Form.Label>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="lastName">
+                  <Form.Label>성</Form.Label>
                   <Form.Control
-                    placeholder="010-xxx-xxxxx"
+                    type="text"
                     onChange={handleFormChange}
                     required
-                    name="contact"
+                    name="lastName"
+                    value={shipInfo.lastName}
                   />
                 </Form.Group>
 
-                <Button onClick={execDaumPostcode}>주소 검색</Button>
-                <Form.Group as={Col} controlId="formGridZip">
-                    <Form.Label>우편번호</Form.Label>
-                    <Form.Control
-                      placeholder=" 위의 '주소검색'을 이용해서 입력해주세요"
-                      onChange={handleFormChange}
-                      required
-                      name="zip"
-                      value={shipInfo.zip}
-                    />
-                  </Form.Group>
-                <Form.Group className="mb-3" controlId="formGridAddress">
-                  <Form.Label>주소</Form.Label>
+                <Form.Group as={Col} controlId="firstName">
+                  <Form.Label>이름</Form.Label>
                   <Form.Control
-                    placeholder="'주소 검색'으로 자동 완성됩니다."
+                    type="text"
                     onChange={handleFormChange}
                     required
-                    name="address"
-                    value={shipInfo.address}
+                    name="firstName"
+                    value={shipInfo.firstName}
                   />
-                 
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formGridAddress2">
-                  <Form.Label>나머지 상세주소</Form.Label>
+              </Row>
+
+              <Form.Group className="mb-3" controlId="formGridContact">
+                <Form.Label>연락처</Form.Label>
+                <Form.Control
+                  placeholder="010-xxx-xxxxx"
+                  onChange={handleFormChange}
+                  required
+                  name="contact"
+                  value={shipInfo.contact}
+                />
+              </Form.Group>
+
+              <Button onClick={execDaumPostcode}>주소 검색</Button>
+              <Form.Group as={Col} controlId="formGridZip">
+                  <Form.Label>우편번호</Form.Label>
                   <Form.Control
-                    placeholder="나머지 상세주소를 입력해 주세요"
+                    placeholder=" 위의 '주소검색'을 이용해서 입력해주세요"
                     onChange={handleFormChange}
                     required
-                    name="address2"
-                    value={shipInfo.address2}
+                    name="zip"
+                    value={shipInfo.zip}
                   />
-                 
+                </Form.Group>
+              <Form.Group className="mb-3" controlId="formGridAddress">
+                <Form.Label>주소</Form.Label>
+                <Form.Control
+                  placeholder="'주소 검색'으로 자동 완성됩니다."
+                  onChange={handleFormChange}
+                  required
+                  name="address"
+                  value={shipInfo.address}
+                />
+                
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formGridAddress2">
+                <Form.Label>나머지 상세주소</Form.Label>
+                <Form.Control
+                  placeholder="나머지 상세주소를 입력해 주세요"
+                  onChange={handleFormChange}
+                  required
+                  name="address2"
+                  value={shipInfo.address2}
+                />
+                
+              </Form.Group>
+
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridCity">
+                  <Form.Label>도시</Form.Label>
+                  <Form.Control
+                    onChange={handleFormChange}
+                    placeholder="선택사항입니다. 입력하고 싶으면 입력해주세요"
+                    name="city"
+                    value={shipInfo.city}
+                  />
                 </Form.Group>
 
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>도시</Form.Label>
-                    <Form.Control
-                      onChange={handleFormChange}
-                      placeholder="선택사항입니다. 입력하고 싶으면 입력해주세요"
-                      name="city"
-                      value={shipInfo.city}
-                    />
-                  </Form.Group>
-
-                  
-                </Row>
-                {/* <div className="mobile-receipt-area"> 
-                //아래로 이동했다. 그래야 우측에 나타나게 된다.
-                  <OrderReceipt /> 
-                </div> */}
+                
+              </Row>
+              {/* <div className="mobile-receipt-area"> 
+              //아래로 이동했다. 그래야 우측에 나타나게 된다.
+                <OrderReceipt /> 
+              </div> */}
+              <div>
+                <h2 className="payment-title">결제 정보</h2>
+              </div>
+              {lastTotal?
                 <div>
-                  <h2 className="payment-title">결제 정보</h2>
+                  <PaymentForm cardValue={cardValue}
+                    handleInputFocus={handleInputFocus}
+                    handlePaymentInfoChange={handlePaymentInfoChange}
+                  />
+                  <Button
+                    variant="dark"
+                    className="payment-button pay-button"
+                    type="submit"
+                  >
+                    결제하기
+                  </Button>
                 </div>
-                {lastTotal?
-                  <div>
-                    <PaymentForm cardValue={cardValue}
-                      handleInputFocus={handleInputFocus}
-                      handlePaymentInfoChange={handlePaymentInfoChange}
-                    />
-                    <Button
-                      variant="dark"
-                      className="payment-button pay-button"
-                      type="submit"
-                    >
-                      결제하기
-                    </Button>
-                  </div>
-                  :
-                  <div>
-                    <h4>결제할 금액이 0원입니다.</h4>
-                    <Button variant='success' onClick={handleSubmit}>주문하기</Button>
-                  </div>
-                }
-              </Form>
-            </div>
+                :
+                <div>
+                  <h4>결제할 금액이 0원입니다.</h4>
+                  <Button variant='success' onClick={handleSubmit}>주문하기</Button>
+                </div>
+              }
+            </Form>
           </div>
         </Col>
         <Col lg={5} className="receipt-area">

@@ -61,6 +61,31 @@ const userStore =create((set,get)=>({
 			console.log(e.error)
 		}
 	},
+	updateUserPassword:async(userId, newPassword)=>{
+		try{
+			// console.log('스토어에 들어온 newPassword:',newPassword)
+			const resp = await api.put('/user/new-password',{userId, newPassword})
+			set({
+				user: resp.data.data,
+				selectedUser:resp.data.data,
+				userUpdated: !get().userUpdated
+			})
+		}catch(e){
+			console.log(e.error)
+		}
+	},
+	updateUserShipTo:async(userId,newShipTo)=>{
+		try{
+			const resp = await api.put('/user/new-shipTo',{userId, newShipTo})
+			set({
+				user: resp.data.data,
+				selectedUser:resp.data.data,
+				userUpdated: !get().userUpdated
+			})
+		}catch(e){
+			console.log(e.error)
+		}
+	},
 	getUserList: async(searchQuery)=>{
 		if(searchQuery?.name ===''){
 			delete searchQuery.name;

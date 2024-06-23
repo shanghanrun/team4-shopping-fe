@@ -1,8 +1,5 @@
 
 
-
-
-
 import React, { useState, useEffect } from "react";
 import {Link} from 'react-router-dom'
 import { Container,Button } from "react-bootstrap";
@@ -14,6 +11,8 @@ import productStore from '../store/productStore'
 import movieStore from '../store/movieStore'
 import Popup2Deletable from "../components/Popup2Deletable";
 import { currencyFormat } from './../utils/number';
+import Popup2UserShipTo from "../components/Popup2UserShipTo";
+import Popup2UserPassword from "../components/Popup2UserPassword";
 
 const MyPage = () => {
   const {user} = userStore()
@@ -21,7 +20,7 @@ const MyPage = () => {
   const {getViewedProductList, viewedProductList,viewedUpdated} = productStore()
   const {userMovies} = movieStore()
   const [openViewed, setOpenViewed]= useState(false)
-  const [openUserId, setOpenUserId]= useState(false)
+  const [openUserPassword, setOpenUserPassword]= useState(false)
   const [openUserShipTo, setOpenUserShipTo] =useState(false)
 
   // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
@@ -35,7 +34,7 @@ const MyPage = () => {
     setOpenViewed(!openViewed)
   }
   const showUserId=()=>{
-    setOpenUserId(!openUserId)
+    setOpenUserPassword(!openUserPassword)
   }
   const showUserShipTo=()=>{
     setOpenUserShipTo(!openUserShipTo)
@@ -43,8 +42,8 @@ const MyPage = () => {
   const closeViewed=()=>{
     setOpenViewed(false)
   }
-  const closeUserId=()=>{
-    setOpenUserId(false)
+  const closeUserPassword=()=>{
+    setOpenUserPassword(false)
   }
   const closeUserShipTo=()=>{
     setOpenUserShipTo(false)
@@ -73,8 +72,8 @@ const MyPage = () => {
             <p>coupon: {currencyFormat(user.coupon)}원</p>
           </div>
           <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'관심 닫기' :'관심 보기'}</Button>
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showId}>{openUserId?'아이디수정 닫기' :'아이디 수정'}</Button>
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showShipTo}>{openUserShipTo?'주배송지수정 닫기' :'주배송지 선택'}</Button>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showUserId}>{openUserPassword?'패스워드수정 닫기' :'패스워드 수정'}</Button>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showUserShipTo}>{openUserShipTo?'주배송지수정 닫기' :'주배송지 선택'}</Button>
       </div>
       <div className='popup-mother'>
         <Popup2Deletable
@@ -82,14 +81,14 @@ const MyPage = () => {
         closeViewed={closeViewed}
         viewedProductList={viewedProductList}
         />
-        <Popup2UserId
-        openUserId{openUserId}
-        closeUserId{closeUserId}
+        <Popup2UserPassword
+        openUserPassword={openUserPassword}
+        closeUserPassword={closeUserPassword}
         user={user}
         />
         <Popup2UserShipTo
-        openUserShipTo{openUserShipTo}
-        closeUserShipTo{closeUserShipTo}
+        openUserShipTo={openUserShipTo}
+        closeUserShipTo={closeUserShipTo}
         user={user}
         />
       </div>

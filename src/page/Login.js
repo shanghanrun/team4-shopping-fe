@@ -27,7 +27,7 @@ const Login = () => {
 	// }
 
   useEffect(() => {
-    setError(false)//기존 에러를 초기화
+    setError('')//기존 에러를 초기화 
     if (user) {
       navigate("/");
     }
