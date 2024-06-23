@@ -21,6 +21,8 @@ const MyPage = () => {
   const {getViewedProductList, viewedProductList,viewedUpdated} = productStore()
   const {userMovies} = movieStore()
   const [openViewed, setOpenViewed]= useState(false)
+  const [openUserId, setOpenUserId]= useState(false)
+  const [openUserShipTo, setOpenUserShipTo] =useState(false)
 
   // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
   useEffect(()=>{
@@ -32,14 +34,20 @@ const MyPage = () => {
   const showViewed=()=>{
     setOpenViewed(!openViewed)
   }
-  const showId=()=>{
-    setOpenViewed(!openViewed)
+  const showUserId=()=>{
+    setOpenUserId(!openUserId)
   }
-  const showShipTo=()=>{
-    setOpenViewed(!openViewed)
+  const showUserShipTo=()=>{
+    setOpenUserShipTo(!openUserShipTo)
   }
   const closeViewed=()=>{
     setOpenViewed(false)
+  }
+  const closeUserId=()=>{
+    setOpenUserId(false)
+  }
+  const closeUserShipTo=()=>{
+    setOpenUserShipTo(false)
   }
 
   if(orderList.length ===0){
@@ -65,14 +73,24 @@ const MyPage = () => {
             <p>coupon: {currencyFormat(user.coupon)}원</p>
           </div>
           <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'관심 닫기' :'관심 보기'}</Button>
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showId}>{openIdViewed?'아이디수정 닫기' :'아이디 수정'}</Button>
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showShipTo}>{openShipToViewed?'주배송지수정 닫기' :'주배송지 선택'}</Button>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showId}>{openUserId?'아이디수정 닫기' :'아이디 수정'}</Button>
+          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showShipTo}>{openUserShipTo?'주배송지수정 닫기' :'주배송지 선택'}</Button>
       </div>
       <div className='popup-mother'>
         <Popup2Deletable
         openViewed={openViewed}
         closeViewed={closeViewed}
         viewedProductList={viewedProductList}
+        />
+        <Popup2UserId
+        openUserId{openUserId}
+        closeUserId{closeUserId}
+        user={user}
+        />
+        <Popup2UserShipTo
+        openUserShipTo{openUserShipTo}
+        closeUserShipTo{closeUserShipTo}
+        user={user}
         />
       </div>
       {
