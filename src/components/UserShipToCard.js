@@ -38,10 +38,11 @@ const UserShipToCard = ({user, closeUserShipTo}) => {
         )}
       <div>주 배송지를 선택해 주세요.</div>
       {user.shipTo && user.shipTo.map((address, index)=>(
-        <div key={index}>
+        <div key={index} style={{border:'1px solid gray'}}>
           <input
             type="radio"
             name="shipTo"
+            placeholder={`${address.address} ${address.address2} ${address.city} ${address.zip}`}
             value={address}
             checked={newAddress === address}
             onChange={handleShipToChange}

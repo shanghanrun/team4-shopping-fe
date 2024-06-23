@@ -71,6 +71,7 @@ const AdminOrderPage = () => {
           />
         </div>
         <h5>Total Orders: {totalCount} 품목</h5>
+        <h6>테이블 header를 클릭하면 'preparing(배송준비)'를 상위에 보여줍니다.</h6>
         <OrderTable
           header={tableHeader}
           data={allUserOrderList}
