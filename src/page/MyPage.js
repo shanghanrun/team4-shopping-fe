@@ -17,7 +17,7 @@ import PaidIcon from "@mui/icons-material/Paid";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
 
 const MyPage = () => {
-  const {user} = userStore()
+  const {user,updateUserShipTo} = userStore()
   const {orderList, getOrderList} = orderStore()
   const {getViewedProductList, viewedProductList,viewedUpdated} = productStore()
   const {userMovies} = movieStore()
@@ -47,8 +47,9 @@ const MyPage = () => {
   const closeUserPassword=()=>{
     setOpenUserPassword(false)
   }
-  const closeUserShipTo=()=>{
+  const closeUserShipTo=async(selectedAddress)=>{
     setOpenUserShipTo(false)
+    await updateUserShipTo(selectedAddress)
   }
 
   if(orderList.length ===0){
@@ -63,37 +64,35 @@ const MyPage = () => {
   }
   return (
     <Container className="status-card-container">
-      <div style={{border:'solid 1px gray', padding:'5px', height:'70px', boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'
-          }}>
-            
-            
-            
-      </div>
+      <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
+      <div style={{display:'flex', justifyContent:'space-between', flexWrap:'wrap'}}>
       
-      <div style={{display:'flex', gap:'10px', flexWrap:'wrap'}}>
-
-          <AccountCircleIcon style={{ fontSize: "150px", color: "grey" }} />
+          <div style={{display:'flex', justifyContent:'space-between', flexWrap:'wrap',
+        border:'solid 1px gray', boxShadow:'rgba(0,0,0,0.15) 1.95px 1.95px 2.6px'
+      }}>
+          <AccountCircleIcon style={{ fontSize: "100px", color: "grey" }} />
           <div>
-            <div style={{ width: "200px", textAlign: "center" }}>
+            <div style={{height:'20px'}}></div>
+            <div style={{ width: "250px", textAlign: "center", fontSize:'20px'}}>
                           <PaidIcon sx={{ "&:hover": { color: "#004cff" } }} />
-                          <span>credit: {currencyFormat(user.credit)}원</span>
+                          <span> credit: {currencyFormat(user.credit)}원</span>
             </div>
-            <div style={{ width: "200px", textAlign: "center" }}>
+            <div style={{ width: "250px", textAlign: "center",fontSize:'20px' }}>
                       <CalendarViewWeekIcon sx={{ "&:hover": { color: "#004cff" } }} />
-                      <span>coupon: {currencyFormat(user.coupon)}원</span>
+                      <span> coupon: {currencyFormat(user.coupon)}원</span>
             </div>
           </div>
       </div>
-      <div style={{display:'flex', gap:'10px', flexWrap:'wrap'}}>
 
-          <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
 
           
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'관심 닫기' :'관심 보기'}</Button>
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showUserId}>{openUserPassword?'패스워드수정 닫기' :'패스워드 수정'}</Button>
-          <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showUserShipTo}>{openUserShipTo?'주배송지수정 닫기' :'주배송지 선택'}</Button>
+          <Button variant='danger' style={{height:'68px', marginBottom:'10px'}} onClick={showUserId}>{openUserPassword?'패스워드수정 닫기' :'패스워드 수정'}</Button>
+          <Button variant='danger' style={{height:'68px', marginBottom:'10px'}} onClick={showUserShipTo}>{openUserShipTo?'주배송지수정 닫기' :'주배송지 선택'}</Button>
     </div>
-      
+    <div style={{margin: '10px 0', display:'flex', gap:'20px'}}>
+        <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'관심 닫기' :'관심 보기'}</Button>
+        <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'자주 산 상품 닫기' :'자주 산 상품'}</Button>
+    </div>  
       <div className='popup-mother'>
         <Popup2Deletable
         openViewed={openViewed}
@@ -111,8 +110,8 @@ const MyPage = () => {
         user={user}
         />
       </div>
-      <div>
-        <h5>주문 내역</h5>
+      <div style={{marginTop:'30px'}}>
+        <h3>주문 내역</h3>
         {
           orderList.map((order, i)=>(
             <div key={i}>

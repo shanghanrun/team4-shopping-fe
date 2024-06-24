@@ -1,9 +1,11 @@
 import {create} from 'zustand'
 import api from '../utils/api';
 import uiStore from './uiStore'
-import { bestItemNo, newItemDays } from '../constants/adminConstants';
+// import { bestItemNo, newItemDays } from '../constants/adminConstants';
 // import { isEqual } from 'lodash';
-
+// const newItemDays = parseInt(sessionStorage.getItem('newItemDays'))
+// console.log('스토어 newItemDays :', newItemDays)
+// const bestItemNo = parseInt(sessionStorage.getItem('bestItemNo'))
 const CLOTHES_CATEGORY = [
     "top", "dress", "pants", "skirt","shorts","hat",
     "shirt",
@@ -13,6 +15,8 @@ const COMPUTER_CATEGORY =[
 ];
 const productStore =create((set,get)=>({
 	error:'',
+	newItemDays: parseInt(sessionStorage.getItem('newItemDays')),
+	bestItemNo: parseInt(sessionStorage.getItem('bestItemNo')),
 	productUpdated:false,
 	viewedUpdated:false,
 	selectedProduct:null,
@@ -47,9 +51,12 @@ const productStore =create((set,get)=>({
 		newProductList:[],
 		showPopup: false
 	})}, 
+	setStoreNewItemDays:(val)=>set({newItemDays:val}),
+	setStoreBestItemNo:(val)=>set({bestItemNo:val}),
 	makeNewProductList:async()=>{
 		try{ // query params없이 보내면 모든 데이터 받는다.
-			const days = newItemDays;
+			const days = get().newItemDays;
+			console.log('newItemDays:', get().newItemDays)
 			const resp = await api.get('/product') 
 			const list = resp.data.data;
 			console.log('신상 추출을 위한 모든 목록:', list)
@@ -108,7 +115,7 @@ const productStore =create((set,get)=>({
 			set({
 				totalPage: resp.data.totalPageNum,
 				totalProductCount: resp.data.totalProductCount,
-				bestSellerList: listSortedBySoldCount.splice(0,bestItemNo)
+				bestSellerList: listSortedBySoldCount.splice(0,get().bestItemNo)
 			})
 
 			const clothes = resp.data.data.filter((item)=>item.category.some( cat =>CLOTHES_CATEGORY.includes(cat)))

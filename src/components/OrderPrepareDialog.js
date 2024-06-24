@@ -6,7 +6,7 @@ import { ORDER_STATUS } from "../constants/order.constants";
 import { currencyFormat } from "../utils/number";
 import orderStore from '../store/orderStore'
 
-const OrderDetailDialog = ({ open, handleClose }) => {
+const OrderPrepareDialog = ({ open, handleClose }) => {
   const {selectedOrder, updateOrder} = orderStore()
   console.log('selectedOrder :', selectedOrder)
   const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
@@ -25,7 +25,7 @@ const OrderDetailDialog = ({ open, handleClose }) => {
     return <></>;
   }
   return (
-    <Modal show={open} onHide={handleClose}>
+    <Modal show={open} onHide={handleClose} >
       <Modal.Header closeButton>
         <Modal.Title>Order Detail</Modal.Title>
       </Modal.Header>
@@ -98,4 +98,4 @@ const OrderDetailDialog = ({ open, handleClose }) => {
   );
 };
 
-export default OrderDetailDialog;
+export default OrderPrepareDialog;

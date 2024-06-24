@@ -19,7 +19,7 @@ const ProductJson2Db = () => {
 
   return (
     <div>
-      <Button onClick={handleImport}>Product Json to cloud DB</Button>
+      <Button style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px', marginBottom:'10px'}}  onClick={handleImport}>Product Json to cloud DB</Button>
     </div>
   );
 };

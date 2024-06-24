@@ -15,6 +15,7 @@ const orderStore =create((set, get)=>({
 	allUserOrderList:[],
 	totalCount:1,
 	orderUpdated: false,
+	preparingOrders:[],
 	setTotalPrice:(val)=>set({totalPrice: val}),
 	setShip:(val)=>set({ship: val}),
 	setPayment:(val)=>set({payment: val}),
@@ -110,6 +111,19 @@ const orderStore =create((set, get)=>({
 			orderList: get().normalList,
 			orderUpdated: !get().orderUpdated
 		})
+	},
+	getPreparingOrders:async()=>{
+		try{
+			const resp = await api.get('/order/preparing')
+			set({
+				preparingOrders:resp.data.data,
+				orderUpdated: !get().orderUpdated
+			})
+		}catch(e){
+			console.log('e.error:', e.error)
+			set({error: e.error})
+			uiStore.getState().showToastMessage(e.error, 'error');
+		}
 	}
 }))
 

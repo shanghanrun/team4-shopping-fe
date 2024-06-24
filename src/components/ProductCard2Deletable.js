@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { currencyFormat } from "../utils/number";
 import productStore from '../store/productStore'
 import userStore from '../store/userStore'
-import { newItemDays } from "../constants/adminConstants";
+// import { newItemDays } from "../constants/adminConstants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const ProductCard2Deletable = ({item}) => {
+  const newItemDays = parseInt(sessionStorage.getItem('newItemDays'))
   // console.log('item의 구조:', item)
   const {selectProduct, deleteItemFromUserViewed} = productStore()
   const {updateUserViewed} = userStore()

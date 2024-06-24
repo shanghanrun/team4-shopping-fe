@@ -74,9 +74,10 @@ const userStore =create((set,get)=>({
 			console.log(e.error)
 		}
 	},
-	updateUserShipTo:async(userId,newShipTo)=>{
+	updateUserShipTo:async(selectedAddress)=>{
 		try{
-			const resp = await api.put('/user/new-shipTo',{userId, newShipTo})
+			const userId = get().user._id
+			const resp = await api.put('/user/new-shipTo',{userId, selectedAddress})
 			set({
 				user: resp.data.data,
 				selectedUser:resp.data.data,

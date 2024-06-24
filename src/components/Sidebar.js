@@ -19,7 +19,7 @@ const Sidebar = () => {
         </Link>
         <div className="sidebar-item"
           onClick={() => handleSelectMenu("/admin/account")}
-        >Admin Account (*기능추가 됨)</div>
+        >Admin Account</div>
         <ul className="sidebar-area">
           <li
             className="sidebar-item"

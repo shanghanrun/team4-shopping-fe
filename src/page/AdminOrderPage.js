@@ -8,11 +8,16 @@ import ReactPaginate from "react-paginate";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import orderStore from '../store/orderStore'
 import uiStore from '../store/uiStore'
+import {Button} from 'react-bootstrap'
+import PreparingOrderTable from "../components/PreparingOderTable";
+import OrderPrepareDialog from "../components/OrderPrepareDialog";
 
 const AdminOrderPage = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
-  const { orderList, totalPageNum,setSelectedOrder,selectedOrder, getAllUserOrderList, allUserOrderList, totalCount } = orderStore()
+  const { orderList, totalPageNum,setSelectedOrder,selectedOrder, getAllUserOrderList, allUserOrderList, totalCount, getPreparingOrders, preparingOrders } = orderStore()
+  const [showPreparingOrder, setShowPreparingOrder]=useState(false)
+  const [openPrepare, setOpenPrepare] = useState(false)
   const [searchQuery, setSearchQuery] = useState({
     page: query.get("page") || 1,
     orderNum: query.get("orderNum") || "",
@@ -31,6 +36,7 @@ const AdminOrderPage = () => {
 
   useEffect(() => {
     getAllUserOrderList(searchQuery)
+    getPreparingOrders()
   }, [query, selectedOrder]);
 
   useEffect(() => {
@@ -48,6 +54,10 @@ const AdminOrderPage = () => {
     setOpen(true);
     setSelectedOrder(order)
   };
+  const openPreparingEditForm = (order) => {
+    setOpenPrepare(true);
+    setSelectedOrder(order)
+  };
 
   const handlePageClick = ({ selected }) => {
     setSearchQuery({ ...searchQuery, page: selected + 1 });
@@ -56,7 +66,22 @@ const AdminOrderPage = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handlePrepareClose=()=>{
+    setOpenPrepare(false)
+  }
 
+  const deleteItem = async (id) => {
+    //아이템 삭제하기 - 이것은 아직 구현하지 않았다.!!
+    // 굳이 삭제할 필요까지는 없을 것 같다.
+    const confirmed = window.confirm("정말로 삭제하시겠습니까?")
+    if(confirmed){
+      // await deleteOrder(id)
+    }
+  };
+
+  const togglePreparingOrderTable=()=>{
+    setShowPreparingOrder(!showPreparingOrder)
+  }
 
   return (
     <div className="locate-center">
@@ -70,8 +95,19 @@ const AdminOrderPage = () => {
             field="orderNum"
           />
         </div>
+        <Button variant='warning' style={{marginBottom:'10px',boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}} onClick={togglePreparingOrderTable}>{showPreparingOrder? 'Preparing 품목보기 취소' :'Preparing 품목보기'}</Button>
         <h5>Total Orders: {totalCount} 품목</h5>
-        <h6>테이블 header를 클릭하면 'preparing(배송준비)'를 상위에 보여줍니다.</h6>
+
+        <PreparingOrderTable
+          header={tableHeader}
+          data ={preparingOrders}
+          deleteItem={deleteItem}
+          openEditForm={openPreparingEditForm}
+          show={showPreparingOrder}
+          setShowPreparingOrder={setShowPreparingOrder}
+        />
+
+        <div style={{height:'20px'}}></div>
         <OrderTable
           header={tableHeader}
           data={allUserOrderList}
@@ -100,6 +136,7 @@ const AdminOrderPage = () => {
       </Container>
 
       {open && <OrderDetailDialog open={open} handleClose={handleClose} />}
+      {openPrepare && <OrderPrepareDialog open={openPrepare} handleClose={handlePrepareClose} />}
     </div>
   );
 };

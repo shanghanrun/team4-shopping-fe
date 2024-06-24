@@ -15,6 +15,8 @@ const ProductAll = () => {
   // const {popupContent} = uiStore() 
   const {getOrderList} = orderStore()
   // productList를 구독하고 있으면 된다.
+  sessionStorage.setItem('newItemDays', 20)
+  sessionStorage.setItem('bestItemNo', 10)
 
   useEffect(()=>{
     if(user) getOrderList()

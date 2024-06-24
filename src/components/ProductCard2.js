@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { currencyFormat } from "../utils/number";
 import productStore from '../store/productStore'
 import userStore from '../store/userStore'
-import { newItemDays } from "../constants/adminConstants";
+// import { newItemDays } from "../constants/adminConstants";
 
 const ProductCard2 = ({item}) => {
+  const newItemDays = parseInt(sessionStorage.getItem('newItemDays'))
   const {selectProduct} = productStore()
   const {updateUserViewed} = userStore()
   const [soldout, setSoldout] = useState(false)

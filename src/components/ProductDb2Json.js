@@ -18,9 +18,9 @@ const ProductDb2Json = () => {
   };
 
   return (
-    <div style={{marginBottom: '10px'}}>
-      <Button variant="success"
-        onClick={downloadJson}>Download Json</Button>
+    <div style={{marginBottom: '10px'}} >
+      <Button variant="success" style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}} 
+        onClick={downloadJson}>Download ProductDb to Json</Button>
     </div> 
   );
 };

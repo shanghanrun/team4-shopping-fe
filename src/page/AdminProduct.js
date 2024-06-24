@@ -10,15 +10,19 @@ import ProductTable from "../components/ProductTable";
 import orderStore from '../store/orderStore'
 import userStore from '../store/userStore'
 import LowStockProductTable from "../components/LowStockProductTable";
+import { getNewItemDays, getBestItemNo } from "../constants/adminConstants";
 
 const AdminProduct = () => {
-    const {productList, getProductList, totalPage, setSelectedProduct, deleteProduct, totalProductCount, selectedProduct, productUpdated, openPopup,emptyNewProductList, getLowStockItems, lowStockItems } = productStore()
+    const {productList, getProductList, totalPage, setSelectedProduct, deleteProduct, totalProductCount, selectedProduct, productUpdated, openPopup,emptyNewProductList, getLowStockItems, lowStockItems,setStoreNewItemDays, setStoreBestItemNo } = productStore()
     const {getUserList} = userStore()
   const {getAllUserOrderList} = orderStore()
   const {showToastMessage} = uiStore()
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
   const [showLowStockProduct, setShowLowStockProduct] =useState(false)
+
+  const [newItemDays, setNewItemDays] = useState(getNewItemDays());
+  const [bestItemNo, setBestItemNo] = useState(getBestItemNo());
 
 
   const [searchQuery, setSearchQuery] = useState({
@@ -89,6 +93,22 @@ const AdminProduct = () => {
     setShowLowStockProduct(!showLowStockProduct);
   };
 
+  const handleNewItemDaysChange = (event) => {
+        setNewItemDays(event.target.value);
+    };
+
+  const handleBestItemNoChange = (event) => {
+      setBestItemNo(event.target.value);
+  };
+
+  const saveSettings = () => {
+      // sessionStorage.setItem('newItemDays', newItemDays);
+      // sessionStorage.setItem('bestItemNo', bestItemNo);
+       setStoreNewItemDays(newItemDays);
+       setStoreBestItemNo(bestItemNo)
+      alert('Settings saved successfully!');
+  };
+
   return (
     <div className="locate-center">
       <Container>
@@ -101,16 +121,30 @@ const AdminProduct = () => {
             placeholder="제품 이름으로 검색"
             field="name"
           />
-          <Button variant="success" onClick={async()=> await openPopup()}>신상 보여주기</Button>
-          <Button onClick={()=>emptyNewProductList()}>신상홍보제거</Button>
+          <Button variant="success" style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}}  onClick={async()=> await openPopup()}>신상 보여주기</Button>
+          <Button  style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}} onClick={()=>emptyNewProductList()}>신상홍보제거</Button>
 
         </div>
-        <Button className="mt-2 mb-2" onClick={handleClickNewItem}>
+        <Button className="mt-2 mb-2" style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}}onClick={handleClickNewItem}>
           Add New Item +
         </Button>
-        <Button variant="warning" style={{marginLeft:'10px'}} onClick={toggleLowStockProductTable}>{showLowStockProduct ? '재고부족 상품검색 취소' : '재고부족 상품검색'}</Button>
+        <Button variant="warning" style={{marginLeft:'10px',boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}} onClick={toggleLowStockProductTable}>{showLowStockProduct ? '재고부족 상품검색 취소' : '재고부족 상품검색'}</Button>
         <div>신상보여주기(최근1주일내에 등록된 신상품들을, user가 보는 홈페이지에 띄우기)</div>
         <div>신상홍보제거(홈페이지에 띄운 팝업 제거)</div>
+        <div>
+            <label>
+                New Item Days:<span style={{width:'10px'}}> </span>
+                <input type="number" value={newItemDays} onChange={handleNewItemDaysChange} />
+            </label>
+            <button onClick={saveSettings}>Save New Item Days</button>
+        </div>
+        <div>
+            <label>
+                Best Item No :<span style={{width:'13px'}}> </span>
+                <input type="number" value={bestItemNo} onChange={handleBestItemNoChange} />
+            </label>
+            <button onClick={saveSettings}>Save Best Item No </button>
+        </div>
         <div>테이블 head를 클릭하면, 상품목록의 순서(내림순, 올림순)으로 정렬 됩니다.</div>
 
         <div style={{display:'flex', gap:'40px'}}>

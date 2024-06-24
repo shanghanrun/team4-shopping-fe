@@ -47,7 +47,7 @@ const UserTable = ({ header, userList, orderList, openEditForm }) => {
                   <th style={{ minWidth: "100px" }}>{user.email}</th>
                   <th>{user.level}</th>
                   {/* <th>{currencyFormat(userOrder.totalPrice)}</th> */}
-                  <th>{currencyFormat(user.purchase)}</th>
+                  <th>{currencyFormat(user.totalPurchase)}</th>
                   <th>
                     <p>{user.memo}</p>
                     <Button size="sm" onClick={() => openEditForm(user)}>
