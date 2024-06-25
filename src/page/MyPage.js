@@ -15,13 +15,15 @@ import Popup2UserPassword from "../components/Popup2UserPassword";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PaidIcon from "@mui/icons-material/Paid";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
+import Popup2OftenBuy from './../components/Popup2OftenBuy';
 
 const MyPage = () => {
-  const {user,updateUserShipTo} = userStore()
+  const {user,updateUserShipTo,getOftenBuyList, oftenBuyList} = userStore()
   const {orderList, getOrderList} = orderStore()
   const {getViewedProductList, viewedProductList,viewedUpdated} = productStore()
   const {userMovies} = movieStore()
   const [openViewed, setOpenViewed]= useState(false)
+  const [openOftenBuy, setOpenOftenBuy]= useState(false)
   const [openUserPassword, setOpenUserPassword]= useState(false)
   const [openUserShipTo, setOpenUserShipTo] =useState(false)
 
@@ -30,12 +32,17 @@ const MyPage = () => {
     // getOrderList()
     getOrderList()
     getViewedProductList(user.viewedIds)
+    getOftenBuyList(user.purchasedItems)
+    console.log('userPurchasedItems:',user.purchasedItems)
   },[])
 
   const showViewed=()=>{
     setOpenViewed(!openViewed)
   }
-  const showUserId=()=>{
+  const showOftenBuy=()=>{
+    setOpenOftenBuy(!openOftenBuy)
+  }
+  const showUserPassword=()=>{
     setOpenUserPassword(!openUserPassword)
   }
   const showUserShipTo=()=>{
@@ -43,6 +50,9 @@ const MyPage = () => {
   }
   const closeViewed=()=>{
     setOpenViewed(false)
+  }
+  const closeOftenBuy=()=>{
+    setOpenOftenBuy(false)
   }
   const closeUserPassword=()=>{
     setOpenUserPassword(false)
@@ -86,18 +96,23 @@ const MyPage = () => {
 
 
           
-          <Button variant='danger' style={{height:'68px', marginBottom:'10px'}} onClick={showUserId}>{openUserPassword?'패스워드수정 닫기' :'패스워드 수정'}</Button>
+          <Button variant='danger' style={{height:'68px', marginBottom:'10px'}} onClick={showUserPassword}>{openUserPassword?'패스워드수정 닫기' :'패스워드 수정'}</Button>
           <Button variant='danger' style={{height:'68px', marginBottom:'10px'}} onClick={showUserShipTo}>{openUserShipTo?'주배송지수정 닫기' :'주배송지 선택'}</Button>
     </div>
     <div style={{margin: '10px 0', display:'flex', gap:'20px'}}>
         <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'관심 닫기' :'관심 보기'}</Button>
-        <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showViewed}>{openViewed?'자주 산 상품 닫기' :'자주 산 상품'}</Button>
+        <Button variant='success' style={{height:'68px', marginBottom:'10px'}} onClick={showOftenBuy}>{openOftenBuy?'자주 산 상품 닫기' :'자주 산 상품'}</Button>
     </div>  
       <div className='popup-mother'>
         <Popup2Deletable
-        openViewed={openViewed}
-        closeViewed={closeViewed}
-        viewedProductList={viewedProductList}
+          openViewed={openViewed}
+          closeViewed={closeViewed}
+          viewedProductList={viewedProductList}
+        />
+        <Popup2OftenBuy
+          openOftenBuy={openOftenBuy}
+          closeOftenBuy={closeOftenBuy}
+          oftenBuyList={oftenBuyList}
         />
         <Popup2UserPassword
         openUserPassword={openUserPassword}

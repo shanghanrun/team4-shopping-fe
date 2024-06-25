@@ -71,7 +71,9 @@ body{
 }
 
 .search-box{
-  border-bottom: 1px solid black;
+  height: '12px';
+  width: '100px';
+  /* border-bottom: 1px solid black; */
   /* position: absolute; */
   padding: 5px;
 }

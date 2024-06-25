@@ -115,7 +115,8 @@ const productStore =create((set,get)=>({
 			set({
 				totalPage: resp.data.totalPageNum,
 				totalProductCount: resp.data.totalProductCount,
-				bestSellerList: listSortedBySoldCount.splice(0,get().bestItemNo)
+				bestSellerList: listSortedBySoldCount.splice(0,5)
+				// bestSellerList: listSortedBySoldCount.splice(0,get().bestItemNo)
 			})
 
 			const clothes = resp.data.data.filter((item)=>item.category.some( cat =>CLOTHES_CATEGORY.includes(cat)))

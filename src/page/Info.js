@@ -11,7 +11,8 @@ const Info =()=>{
 			<div>다시 hm-shopping으로 돌아오면 'MyPage'에 예약한 영화와 좌석정보가 나옵니다.</div>
 			<div></div>
 			<div style={{height:'100px'}}></div>
-			<h4>기타 서비스 준비중...</h4>
+			<h4>고객 문의</h4>
+			{/* <Inquiry /> */}
 		</Container>
 	</div>		
 	)

@@ -16,6 +16,7 @@ const userStore =create((set,get)=>({
 	leftCoupon:0,
 	creditPlus:0,
 	lastTotal:0,
+	oftenBuyList:[],
 	setCredit:(val)=>set({credit:val}),
 	setCoupon:(val)=>set({coupon:val}),
 	setLeftCred:(val)=>set({leftCredit: val}),
@@ -192,6 +193,26 @@ const userStore =create((set,get)=>({
 			set({user: resp.data.data})
 		}catch(e){
 			console.log(e.error)
+		}
+	},
+	getOftenBuyList: async (userPurchasedItems)=> {
+		try {
+			// 구매 항목을 필드값(구매 수량) 기준으로 내림차순 정렬
+			const sortedList = userPurchasedItems.sort((a, b) => {
+			const aValue = Object.values(a)[0];
+			const bValue = Object.values(b)[0];
+			return bValue - aValue;
+			});
+			//결과적으로 객체들이 정렬된다.
+
+			// 정렬된 겍체들 리스트의 ObjectId를 순차적으로 배열로 추출
+			const objectIds = sortedList.map(item => Object.keys(item)[0]);
+
+			const resp = await api.post('/product/get-often-buy-list', { objectIds });
+
+			set({oftenBuyList: resp.data.data })
+		} catch (e) {
+			console.log(e.error);
 		}
 	}
 

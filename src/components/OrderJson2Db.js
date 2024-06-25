@@ -3,12 +3,12 @@ import {Button} from 'react-bootstrap'
 import api from '../utils/api';
 import uiStore from '../store/uiStore'
 
-const ProductJson2Db = () => {
+const OrderJson2Db = () => {
 	const {showToastMessage} = uiStore()
 
   const handleImport = async () => {
     try {
-      const response = await api.get('/product/json-product-to-cloud');
+      const response = await api.get('/order/json-order-to-cloud');
 	    showToastMessage(response.data.message, "success"); 
       console.log(response.data); // 응답 메시지를 콘솔에 출력
     } catch (error) {
@@ -19,9 +19,9 @@ const ProductJson2Db = () => {
 
   return (
     <div>
-      <Button style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px', marginBottom:'10px'}}  onClick={handleImport}>Product Json to cloud DB</Button>
+      <Button style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px', marginBottom:'10px'}}  onClick={handleImport}>Order Json to cloud DB</Button>
     </div>
   );
 };
 
-export default ProductJson2Db;
+export default OrderJson2Db;

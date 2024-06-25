@@ -2,10 +2,12 @@ import React, {useState} from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import reviewStore from '../store/reviewStore'
+import userStore from '../store/userStore'
 
 const ReviewTable = ({ header, data, deleteItem, openEditForm }) => {
   // const {sortProductListBySkuDesc, sortProductListBySkuAsc } = productStore()
   // const [sortBySkuDesc, setSortBySkuDesc] = useState(true);
+  const {user} = userStore()
 
   const convertToStar2 = (star) => {
     return ('⭐'.repeat(star));
@@ -37,17 +39,22 @@ const ReviewTable = ({ header, data, deleteItem, openEditForm }) => {
                 <th>{convertToStar2(item.star)}</th>
                 
                 <th style={{ minWidth: "100px" }}>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => deleteItem(item._id)}
-                    className="mr-1"
-                  >
-                    -
-                  </Button>
-                  <Button size="sm" onClick={() => openEditForm(item)}>
-                    Edit
-                  </Button>
+                  {(user.name === item.author)? 
+                    <div>
+                        <Button
+                        size="sm"
+                        variant="danger"
+                        onClick={() => deleteItem(item._id)}
+                        className="mr-1"
+                      >
+                        -
+                      </Button>
+                      <Button size="sm" onClick={() => openEditForm(item)}>
+                        Edit
+                      </Button>
+                    </div>
+                    :<div></div>
+                    }
                 </th>
               </tr>
             ))

@@ -11,7 +11,7 @@ import productStore from '../store/productStore'
 const InitialFormData = {
   name: "",
   sku: "",
-  kind:"women", // 기본값 설정  이게 있어야 나중에 SIZES[formData.kind] 값이 undefined가 안 될 수 있다.
+  kind:"clothes", // 기본값 설정  이게 있어야 나중에 SIZES[formData.kind] 값이 undefined가 안 될 수 있다.
   stock: {},
   brand:"LG",  // 디폴트 밸류를 넣어두어야 선택안했을 경우 이거라도 들어간다.
   image: "",
@@ -25,15 +25,17 @@ const InitialFormData = {
 };
 
 const KIND=[
-  "women", "men", "kids", "accessories", "bags", "shoes", "jewelry"
+  "clothes", "home", "animal", "jewelry", "bags", "shoes", "it", "etc"
 ]
 const SIZES ={
-  "women": [ 'xs','s', 'm', 'l', 'xl'],
-  "men":['s', 'm', 'l', 'xl'],
-  "accessories": [ '10', '20'],
+  "clothes": [ 'xs','s', 'm', 'l', 'xl'],
+  "home":['s', 'm', 'l'],
   "bags":['s', 'm','l'],
-  "shoes": ['270', '280'],
-  "jewelry":['gold', 'silver', 'metal']
+  "animal":['live','dead'],
+  "shoes": ['230','240','250','260','270','280','290'],
+  "jewelry":['gold', 'silver', 'metal', 'glass', 'purl','etc'],
+  "it":['small', 'big', 'huge'],
+  "etc":['only One Choice']
 }
 const BRAND=[
   'LG', 'SAMSUNG','CJ'

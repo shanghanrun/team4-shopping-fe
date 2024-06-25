@@ -4,12 +4,12 @@ import {Button} from 'react-bootstrap'
 import uiStore from '../store/uiStore'
 
 //몽고디비의 products 컬렉션 자료를 백앤드에 csv로 저장
-const ProductDb2Json = () => {
+const UserDb2Json = () => {
 	const {showToastMessage} = uiStore()
 	
-  const downloadProductJson = async () => {
+  const downloadUserJson = async () => {
     try {
-      const response = await api.get('/product/cloud-product-to-json');
+      const response = await api.get('/user/cloud-user-to-json');
       showToastMessage(response.data.message, "success"); // 응답 메시지를 상태로 저장
     } catch (error) {
       console.error('Error downloading Json file:', error);
@@ -20,9 +20,9 @@ const ProductDb2Json = () => {
   return (
     <div style={{marginBottom: '10px'}} >
       <Button variant="success" style={{boxShadow: 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px'}} 
-        onClick={downloadProductJson}>Download ProductDb to Json</Button>
+        onClick={downloadUserJson}>Download UserDb to Json</Button>
     </div> 
   );
 };
 
-export default ProductDb2Json;
+export default UserDb2Json;

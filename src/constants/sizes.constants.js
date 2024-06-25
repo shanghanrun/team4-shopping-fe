@@ -3,5 +3,12 @@ export const sizes =[
 	's',
 	'm',
 	'l',
-	'xl'
+	'xl',
+	'small',
+	'big',
+	'huge',
+	'gold',
+	'silver',
+	'metal',
+	'only One Choice'
 ] 
