@@ -5,9 +5,9 @@ const replyStore = create((set,get)=>({
 	reply:{},
 	replyAuthor:'',
 	replyUpdated:false,
-	createReply: async (reviewId,content)=>{
+	createReply: async (reviewId, inquiryId,content)=>{
 		try{
-			const resp = await api.post('/reply',{reviewId, content})
+			const resp = await api.post('/reply',{reviewId, inquiryId,content})
 			if(resp.status !== 200) throw new Error(resp.error)
 			set((state)=>({
 				replyUpdated: !state.replyUpdated
