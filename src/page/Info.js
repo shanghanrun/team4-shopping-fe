@@ -6,6 +6,7 @@ import uiStore from '../store/uiStore'
 import { useNavigate } from 'react-router-dom';
 import InquiryList from '../components/InquiryList';
 import inquiryStore from '../store/inquiryStore'
+import replyStore from '../store/replyStore'
 
 const Info =()=>{
 	const [show, setShow] = useState(false)
@@ -13,11 +14,12 @@ const Info =()=>{
 	const {showToastMessage}= uiStore()
 	const navigate = useNavigate()
 	const {getInquiryList, inquiryList, editInquiry, deleteInquiry, inquiryUpdated} = inquiryStore()
+	const {replyUpdated} = replyStore()
 
 	useEffect(()=>{
 		getInquiryList()
 		console.log('inquiryList :', inquiryList)
-	},[inquiryUpdated])
+	},[inquiryUpdated, replyUpdated])
 
 	const handleShowInquiry =()=>{
 		if(!user){
@@ -36,15 +38,17 @@ const Info =()=>{
 			<div>Choice 페이지를 방문해서 영화를 고르고, Reserve페이지에서 좌석을 여러개 선택합니다.</div>
 			<div>다시 hm-shopping으로 돌아오면 'MyPage'에 예약한 영화와 좌석정보가 나옵니다.</div>
 			<div style={{height:'20px'}}></div>
+
+			
 			<InquiryList 
 				inquiryList={inquiryList} 
 				editInquiry={editInquiry} 
 				deleteInquiry={deleteInquiry} 
 			/>
 			<div style={{height:'20px'}}></div>
-			<div>문의글을 작성하시려면, 로그인부터 해주세요.</div>
+			{(!user) && <div>문의글을 작성하시려면, 로그인부터 해주세요.</div>}
 			<div style={{height:'20px'}}></div>
-			<Button onClick={handleShowInquiry}>문의글 작성</Button>
+			{!show && <Button onClick={handleShowInquiry}>문의글 작성</Button>}
 			<div style={{height:'20px'}}></div>
 			{show &&<Inquiry setShow={setShow}/>}
 			<div style={{height:'100px'}}></div>

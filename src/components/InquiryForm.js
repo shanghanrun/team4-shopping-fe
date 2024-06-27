@@ -41,7 +41,11 @@ const InquiryForm = ({ createInquiry, setShow }) => {
           required 
         />
       </div>
-      <Button type="submit">저장</Button>
+      <div style={{display:'flex', gap:'10px'}}>
+
+         <Button type="submit">저장</Button>
+         <Button variant="danger" onClick={()=>setShow(false)}>취소</Button>
+      </div>
     </form>
   );
 };

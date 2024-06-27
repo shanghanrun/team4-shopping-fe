@@ -5,9 +5,10 @@ const InquiryList = ({ inquiryList, editInquiry, deleteInquiry }) => {
 
   return (
     <div>
-      {inquiryList.map(inquiry => (
+      {inquiryList.map((inquiry,index) => (
         <InquiryItem 
           key={inquiry?._id} 
+          index={index}
           inquiry={inquiry} 
           editInquiry={editInquiry} 
           deleteInquiry={deleteInquiry} 

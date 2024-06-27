@@ -8,7 +8,7 @@ const replyStore = create((set,get)=>({
 	createReply: async (reviewId, inquiryId,content)=>{
 		try{
 			const resp = await api.post('/reply',{reviewId, inquiryId,content})
-			if(resp.status !== 200) throw new Error(resp.error)
+			// console.log('스토어로 온 생성된 reply:', resp.data.data)
 			set((state)=>({
 				replyUpdated: !state.replyUpdated
 			}))
