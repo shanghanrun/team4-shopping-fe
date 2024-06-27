@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import {Container, Button} from 'react-bootstrap'
+import {Container, Button,Form, Row, Col} from 'react-bootstrap'
 import ReplyForm from './ReplyForm';
 import userStore from '../store/userStore'
 import replyStore from '../store/replyStore'
 
 const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);// inquiry작성
   const [title, setTitle] = useState(inquiry?.title);
   const [content, setContent] = useState(inquiry?.content);
   const reply = inquiry?.replyIds[0]  //populate한 것 중 첫번째 객체
   console.log('reply :',reply)
   
-  const [editable, setEditable] = useState(false)
+  const [editable, setEditable] = useState(false) // reply작성
   const [replyValue, setReplyValue] = useState('')
   const {user} = userStore()
   const {createReply, updateReply, deleteReply} = replyStore()
@@ -45,12 +45,10 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
       }
 
       setEditable(false)
-      // setIsEditing(false)
       setReplyValue('')
     } else if(e.key ==='Escape'){
       e.preventDefault()
       setEditable(false)
-      // setIsEditing(false)
       setReplyValue('')
     }
   }
@@ -58,27 +56,47 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
   return (
     <div>
       {isEditing ? (
-        <div>
-          <input 
-            type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-          />
-          <textarea 
-            value={content} 
-            onChange={(e) => setContent(e.target.value)} 
-          />
-          <button onClick={handleUpdate}>저장</button>
-          <button onClick={() => setIsEditing(false)}>취소</button>
-        </div>
+        <Form style={{padding:'10px', border:'1px solid black', width: '70vw'}}>
+          <Form.Group as={Row} className="mb-3" controlId="formPlaintextTitle">
+            <Form.Label column sm="2">
+              제목
+            </Form.Label>
+            <Col sm="10">
+              <Form.Control 
+                type="text" 
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)} 
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3" controlId="formPlaintextContent">
+            <Form.Label column sm="2">
+              내용
+            </Form.Label>
+            <Col sm="10">
+              <Form.Control 
+                as="textarea" 
+                rows={3}
+                value={content} 
+                onChange={(e) => setContent(e.target.value)} 
+              />
+            </Col>
+          </Form.Group>
+          <Row className="mb-3">
+            <div style={{display:'flex', justifyContent:'center', gap:'20px'}}>
+              <Button variant="primary" onClick={handleUpdate}>저장</Button>
+              <Button variant="secondary" onClick={() => setIsEditing(false)}>취소</Button>
+            </div>
+          </Row>
+        </Form>
       ) : (
         <div style={{padding:'10px', border:'1px solid black', width: '70vw'}}>
-          <h3>[{index+1}] 제목: {inquiry?.title}</h3>
+          <h3 style={{fontSize:'20px'}}>[{index+1}] 제목: {inquiry?.title}</h3>
         <div>
-        <span>작성자: {inquiry?.author}</span>
+        <span style={{fontSize:'20px'}}>작성자: {inquiry?.author}</span>
         {/* <span>작성자: {inquiry?.authorId._id}</span> */}
         </div>
-          <p style={{padding:'10px', border:'1px solid black', background:'yellow'}}>{inquiry?.content}</p>
+          <p style={{padding:'10px', border:'1px solid black', background:'yellow',fontSize:'20px'}}>{inquiry?.content}</p>
           {/* <p style={{padding:'10px', border:'1px solid black'}}>{reply?.content}</p> */}
 
         <div style={{display:'flex', gap:'10px'}}>
@@ -91,20 +109,19 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
             <Button style={{marginLeft:'300px'}} onClick={openReply}>답변쓰기</Button>
           }
           {editable ?
-            <input 
+            (<input 
               style={{paddingLeft:'10px', width:'500px'}}
               type='text' value={replyValue}
               onChange={handleInputChange}
               onKeyUp={handleKeyUp}
               placeholder={reply?.content}
               autoFocus
-            />
-            : <div style={{fontSize:'20px'}}className="todo-content">{reply?.content}</div>
+            />)
+            : (<div style={{fontSize:'18px', width:'70vw', padding:'5px 10px', background:'#cce7c6'}} onClick={()=>setEditable(true)}className="todo-content">[답변]: {reply?.content}</div>)
           }    
         </div>
 
         <div>
-          <div style={{border:'1px solid black'}} id='reply-box'>{reply?.content}</div>
           {(user?.lever ==='admin') && 
             <div>
               <Button onClick={async()=>await editReply()}>답변수정</Button>
