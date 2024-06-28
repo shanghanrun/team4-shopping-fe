@@ -19,6 +19,7 @@ import Info from "../page/Info";
 import ClothesDetail from "../page/ClothesDetail";
 import ComputerDetail from "../page/ComputerDetail";
 import BestSeller from "../page/BestSeller";
+import AdminInquiry from "../page/AdminInquiry";
 
 const AppRouter = () => {
   return (
@@ -47,6 +48,7 @@ const AppRouter = () => {
         <Route path="/admin/product" element={<AdminProduct />} />
         <Route path="/admin/order" element={<AdminOrderPage />} />
         <Route path="/admin/account" element={<AdminAccount />} />
+        <Route path="/admin/inquiry" element={<AdminInquiry />} />
       </Route>
     </Routes>
   );

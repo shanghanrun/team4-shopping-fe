@@ -23,30 +23,38 @@ const InquiryForm = ({ createInquiry, setShow }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>제목</label>
-        <input 
-          type="text" 
-          value={title} 
-          onChange={(e) => setTitle(e.target.value)} 
-          required 
-        />
-      </div>
-      <div>
-        <label>문의글</label>
-        <textarea 
-          value={content} 
-          onChange={(e) => setContent(e.target.value)} 
-          required 
-        />
-      </div>
-      <div style={{display:'flex', gap:'10px'}}>
+    <div style={{border:'1px solid black', borderRadius:'10px', padding:'10px', width:'70vw'}}>
 
-         <Button type="submit">저장</Button>
-         <Button variant="danger" onClick={()=>setShow(false)}>취소</Button>
-      </div>
-    </form>
+
+      <form onSubmit={handleSubmit}>
+        <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+          <label>제목 : </label>
+          <input 
+            style={{width:'400px', padding:'10px'}}
+            type="text" 
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+            required 
+          />
+        </div>
+        <div style={{height:'5px'}}></div>
+        <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+          <label>문의글</label>
+          <textarea
+            style={{width:'400px', padding:'10px'}} 
+            value={content} 
+            onChange={(e) => setContent(e.target.value)} 
+            required 
+          />
+        </div>
+        <div style={{height:'5px'}}></div>
+        <div style={{display:'flex', gap:'40px',marginLeft:'180px'}}>
+
+          <Button type="submit">저장</Button>
+          <Button variant="danger" onClick={()=>setShow(false)}>취소</Button>
+        </div>
+      </form>
+    </div>
   );
 };
 

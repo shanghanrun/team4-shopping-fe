@@ -33,6 +33,12 @@ const Sidebar = () => {
           >
             order
           </li>
+          <li
+            className="sidebar-item"
+            onClick={() => handleSelectMenu("/admin/inquiry")}
+          >
+            고객문의
+          </li>
         </ul>
       </div>
     );

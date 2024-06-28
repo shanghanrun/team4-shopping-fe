@@ -3,6 +3,7 @@ import {Container, Button,Form, Row, Col} from 'react-bootstrap'
 import ReplyForm from './ReplyForm';
 import userStore from '../store/userStore'
 import replyStore from '../store/replyStore'
+import uiStore from '../store/uiStore'
 
 const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
   const [isEditing, setIsEditing] = useState(false);// inquiry작성
@@ -15,6 +16,7 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
   const [replyValue, setReplyValue] = useState('')
   const {user} = userStore()
   const {createReply, updateReply, deleteReply} = replyStore()
+  const {showToastMessage} = uiStore()
 
  
 
@@ -27,6 +29,13 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
 	   // 아래의 id 'reply-box'인 태그를 editable한 것으로 만들고, 값을 입력하고
      // 그 입력 값을 받아서 저장하게 한다. 저장하고 editable 속성을 없앤다.
      setEditable(true)
+  }
+  const onReplyClick=()=>{
+    if(user?.level !== 'admin'){
+      showToastMessage('관리자 외에는 답변을 못합니다.', 'error')
+      return;
+    }
+    setEditable(true)
   }
   const editReply=async()=>{
     await updateReply(reply?.id, reply?.content)
@@ -96,7 +105,7 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
         <span style={{fontSize:'20px'}}>작성자: {inquiry?.author}</span>
         {/* <span>작성자: {inquiry?.authorId._id}</span> */}
         </div>
-          <p style={{padding:'10px', border:'1px solid black', background:'yellow',fontSize:'20px'}}>{inquiry?.content}</p>
+          <p style={{padding:'10px', border:'1px solid black', background:'#faff74',fontSize:'20px'}}>{inquiry?.content}</p>
           {/* <p style={{padding:'10px', border:'1px solid black'}}>{reply?.content}</p> */}
 
         <div style={{display:'flex', gap:'10px'}}>
@@ -117,7 +126,7 @@ const InquiryItem = ({ inquiry, index,editInquiry, deleteInquiry }) => {
               placeholder={reply?.content}
               autoFocus
             />)
-            : (<div style={{fontSize:'18px', width:'70vw', padding:'5px 10px', background:'#cce7c6'}} onClick={()=>setEditable(true)}className="todo-content">[답변]: {reply?.content}</div>)
+            : (<div style={{fontSize:'18px', width:'70vw', padding:'5px 10px', background:'#cce7c6'}} onClick={onReplyClick}className="todo-content">[답변]: {reply?.content}</div>)
           }    
         </div>
 

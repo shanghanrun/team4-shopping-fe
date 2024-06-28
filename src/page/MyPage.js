@@ -16,9 +16,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PaidIcon from "@mui/icons-material/Paid";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
 import Popup2OftenBuy from './../components/Popup2OftenBuy';
+import {useNavigate} from 'react-router-dom'
 
 const MyPage = () => {
-  const {user,updateUserShipTo,getOftenBuyList, oftenBuyList} = userStore()
+  const {user,updateUserShipTo,getOftenBuyList, oftenBuyList, updateUserReplyChecked} = userStore()
   const {orderList, getOrderList} = orderStore()
   const {getViewedProductList, viewedProductList,viewedUpdated} = productStore()
   const {userMovies} = movieStore()
@@ -26,6 +27,7 @@ const MyPage = () => {
   const [openOftenBuy, setOpenOftenBuy]= useState(false)
   const [openUserPassword, setOpenUserPassword]= useState(false)
   const [openUserShipTo, setOpenUserShipTo] =useState(false)
+  const navigate = useNavigate()
 
   // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
   useEffect(()=>{
@@ -61,6 +63,10 @@ const MyPage = () => {
     setOpenUserShipTo(false)
     await updateUserShipTo(selectedAddress)
   }
+  const goToInfo=async()=>{
+    await updateUserReplyChecked()
+    navigate('/info')
+  }
 
   if(orderList.length ===0){
     return(
@@ -75,6 +81,7 @@ const MyPage = () => {
   return (
     <Container className="status-card-container">
       <h3 style={{marginBottom:'20px', padding:'20px', background:'pink', borderRadius:'10px'}}>{user.name} : {user.email}   /  {orderList?.length} order(s)</h3>
+      <span className='hover-large' style={{cursor:'pointer', background:'#f0f63a', border:'1px solid gray',borderRadius:'10%'}} onClick={goToInfo}>{(!user.replyChecked)?' 문의답변 확인 ':''}</span>
       <div style={{display:'flex', justifyContent:'space-between', flexWrap:'wrap'}}>
       
           <div style={{display:'flex', justifyContent:'space-between', flexWrap:'wrap',

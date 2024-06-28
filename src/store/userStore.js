@@ -195,6 +195,17 @@ const userStore =create((set,get)=>({
 			console.log(e.error)
 		}
 	},
+	updateUserReplyChecked:async()=>{
+		try{
+			const resp = await api.get('/user/replyChecked')
+			set({
+				user: resp.data.data,
+				userUpdated: !get().userUpdated
+			})
+		}catch(e){
+			console.log(e.error);
+		}
+	},
 	getOftenBuyList: async (userPurchasedItems)=> {
 		try {
 			// 구매 항목을 필드값(구매 수량) 기준으로 내림차순 정렬
