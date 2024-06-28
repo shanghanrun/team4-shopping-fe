@@ -66,6 +66,7 @@ const AdminAccount = () => {
   };
 
   const handleClickNewUser = () => {
+    console.log('new user 클릭됨')
     //new 모드로 설정하고
     setMode('new')
     // 다이얼로그 열어주기
@@ -128,7 +129,7 @@ const AdminAccount = () => {
         <div>
           <h5>Total User: {totalUserCount} 명</h5>
         </div>
-
+        
         <UserTable
           header={tableHeader}
           userList={userList}

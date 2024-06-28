@@ -9,11 +9,11 @@ import userStore from '../store/userStore'
 const UserDetailDialog = ({ open, handleClose, mode }) => {
   const {selectedUser, updateUser, createNewUser} = userStore()
   console.log('selectedUser :', selectedUser)
-  const [userName, setUserName] = useState()
-  const [userEmail, setUserEmail] = useState()
-  const [userLevel, setUserLevel] = useState();
-  const [userMemo, setUserMemo] = useState();
-  const [userImage, setUserImage]= useState();
+  const [userName, setUserName] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userLevel, setUserLevel] = useState('');
+  const [userMemo, setUserMemo] = useState('');
+  const [userImage, setUserImage]= useState('');
 
   useEffect(() => {
     if (mode === 'edit' && selectedUser) {
