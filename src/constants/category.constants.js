@@ -5,7 +5,9 @@ export const category =[
 	'skirt',
 	'shorts',
 	'shirt',
+	'shoes',
 	'earring',
+	'necklace',
 	'animal',
 	'셔츠',
 	'탑',
@@ -15,4 +17,5 @@ export const category =[
 	'자동차',
 	'tv',
 	'냉장고',
+	'etc'
 ] 

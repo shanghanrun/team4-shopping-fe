@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import { Form, Modal, Button, Row, Col, ListGroup } from "react-bootstrap";
 import CloudinaryUploadWidget from "../utils/CloudinaryUploadWidget";
 import { CATEGORY, STATUS, SIZE } from "../constants/product.constants";
+import {category} from '../constants/category.constants'
 import "../style/adminProduct.style.css";
 
 import uiStore from '../store/uiStore';
@@ -361,7 +362,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
               value={formData.category}
               required
             >
-              {CATEGORY.map((item, idx) => (
+              {category.map((item, idx) => (
                 <option key={idx} value={item.toLowerCase()}>
                   {item}
                 </option>
