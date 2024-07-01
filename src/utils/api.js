@@ -2,6 +2,7 @@ import axios from "axios";
 // 상황따라 주소 다름
 // const LOCAL_BACKEND = process.env.REACT_APP_LOCAL_BACKEND;
 const PROXY_URL = process.env.REACT_APP_PROXY_URL+'/api';
+console.log('proxy_url', PROXY_URL)
 
 const api = axios.create({
   // baseURL: LOCAL_BACKEND+'/api', //로컬용
