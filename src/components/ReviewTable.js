@@ -39,7 +39,7 @@ const ReviewTable = ({ header, data, deleteItem, openEditForm }) => {
                 <th>{convertToStar2(item.star)}</th>
                 
                 <th style={{ minWidth: "100px" }}>
-                  {user && (user?.name === item.author)? 
+                  { (user && (user?.name === item.author))? 
                     <div>
                         <Button
                         size="sm"
