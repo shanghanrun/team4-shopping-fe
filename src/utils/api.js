@@ -8,7 +8,8 @@ console.log('proxy_url', PROXY_URL)
 const api = axios.create({
   // baseURL: LOCAL_BACKEND+'/api', //로컬용
   // baseURL: PROXY_URL,
-  baseURL: 'https://port-0-team4-shopping-be-ly2ihcepd6d25f57.sel5.cloudtype.app/api',
+  // baseURL: 'https://port-0-team4-shopping-be-ly2ihcepd6d25f57.sel5.cloudtype.app/api', // 클라우드 타입사용시
+  baseURL: process.env.REACT_APP_ORACLE_BACKEND_URL,
   headers: {
     authorization: `Bearer ${sessionStorage.getItem("token")}`,
   },
