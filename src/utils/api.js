@@ -3,7 +3,7 @@ import axios from "axios";
 const LOCAL_BACKEND = process.env.REACT_APP_LOCAL_BACKEND;
 const PROXY_URL = process.env.REACT_APP_PROXY_URL+'/api';
 // const REACT_APP_CLOUDTYPE_BACKEND_URL='https://port-0-team4-shopping-be-ly2ihcepd6d25f57.sel5.cloudtype.app'
-console.log('proxy_url', PROXY_URL)
+// console.log('proxy_url', PROXY_URL)
 
 const api = axios.create({
   // baseURL: LOCAL_BACKEND+'/api', //로컬용
